@@ -1,0 +1,7 @@
+.content {
+    display: block; 
+
+    /* потом убрать */
+    height: 200px;
+    background-color: aqua;
+}
