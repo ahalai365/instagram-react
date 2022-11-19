@@ -1,0 +1,143 @@
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    display: none;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+ }
+
+ .popup__close {
+    position: absolute;
+    top: -40px;
+    right: -40px;
+
+    width: 32px;
+    height: 32px;
+    border: none;
+
+    background-color: transparent;
+    background-image: url(../../../../images/Close.png);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+@media (max-width: 600px) {
+    .popup__close {
+        top: -50px;
+        right: 0;
+        width: 20px;
+    }
+}
+
+.popup__content {
+    background-color: white;
+    color: black;
+    box-sizing: border-box;
+    max-width: 390px;
+    padding: 34px 36px 37px;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    
+    position: relative;
+}
+
+.popup__content_view {
+    position: relative;
+}
+
+.popup__error {
+    width: 100%;
+  
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16.94px;
+    color: red;
+  }
+
+  .popup__img {
+    object-fit: contain;
+    width: 40vw;
+}
+
+.popup__input {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.94px;
+    
+    margin-top: 30px;
+    border: none;
+    border-bottom: 1px solid #000000;
+    min-width: 330px;
+}
+
+.popup__input:focus {
+    border-bottom: 1px solid rgb(49, 102, 214);
+}
+
+.popup__input:nth-child(2n+1):not() {
+    margin-top: 54px;
+}
+
+.popup__input_invalid, .popup__input_invalid:focus {
+    border-bottom: 2px solid red;
+    color: red;
+}
+
+.popup__overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    
+    opacity: 0.5;
+    background-color: #2A2C2F;
+}
+
+.popup__submit {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+
+    width: 100%;
+    height: 50px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+
+    margin-top: 30px;
+}
+
+.popup__submit_disable {
+    opacity: 0.5;
+}
+
+  .popup__title {
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 29px;
+
+    /* margin-bottom: 54px; */
+}
+@media (max-width: 600px) {
+    .popup__title {
+        font-weight: 900;
+        font-size: 18px;
+        line-height: 22px;
+    
+        margin-bottom: 75px;
+    }
+}
+
+.popup_active {
+    display: flex;
+}

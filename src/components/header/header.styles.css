@@ -15,15 +15,11 @@
  }
 
  .logo {
-    height: 100%;
-    width: 119px;
-    /* background-image: url('./../../images/logo.jpg');
-    background-size: cover;
-    border: none; */
+    height: 33px;
  }
  @media (max-width: 700px) {
     .logo {
-        width: 84px;
+        height: 24,4px;
     } 
  }
 

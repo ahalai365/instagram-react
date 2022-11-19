@@ -1,0 +1,79 @@
+.element {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 380px;
+  position: relative;
+}
+
+.element__count {
+  font-weight: 900;
+  font-size: 24px;
+  color: black;
+
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+.element__delete {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  cursor: pointer;
+
+  height: 35px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.element:hover > .element__delete {
+  display: block;
+}
+
+.element__footer {
+  background-color: white;
+  padding: 25px 30px 31px 21px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  overflow: hidden;
+  white-space: nowrap;
+  min-height: 24px;
+}
+
+.element__img {
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  min-height: 300px;
+}
+
+.element__like {
+  align-self: center;
+  height: 22px;
+
+  background-image: url(./../../images/dislike.png);
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: none;
+  outline: none;
+  background-color: white;
+}
+
+.element__like_active {
+  background-image: url(./../../images/like.png);
+}
+
+.element__title {
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 29,05px;
+  color: black;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

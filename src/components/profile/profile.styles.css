@@ -1,0 +1,121 @@
+.profile {
+    padding-top: 40px;
+
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+}
+.profile * {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+@media (max-width: 630px) {
+    .profile {
+        padding-top: 42px;
+
+        flex-direction: column;
+    } 
+}
+
+.profile__add {
+    width: 150px;
+    height: 50px;
+    min-width: 100px;
+    align-content: end;
+    margin-left: 5px;
+    border: 1px solid white;
+
+    background-color: black;
+    background-image: url(./../../images/Add.png);
+    background-size: 18%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+@media (max-width: 630px) {
+    .profile__add {
+        margin-top: 36px;
+        width: 100%;
+        background-size: 16px;
+    }
+}
+
+.profile__avatar {
+    height: 120px;
+    width: 120px;
+    border-radius: 60px;
+    object-fit: cover;
+}
+
+.profile__edit {
+    min-width: 24px;
+    height: 24px;
+    margin-left: 18px;
+    border: 1px solid white;
+    
+    background-color: black;
+    background-image: url(./../../images/edit.png);
+    background-size: 60%;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+@media (max-width: 630px) {
+    .profile__edit {
+        width: 13px;
+        margin-left: 10px;
+    }
+}
+
+.profile__info {
+    max-width: 580px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+    margin-right: auto;
+}
+@media (max-width: 630px) {
+    .profile__info {
+        margin: 0;
+        padding: 26px 0 0 27px;
+    }
+}
+
+.profile__name {
+    font-weight: 500;
+    font-size: 42px;
+    line-height: 48px;
+}
+@media (max-width: 630px) {
+    .profile__name {
+        font-weight: 500;
+        font-size: 27px;
+        line-height: 32,68px;
+    }
+}
+
+.profile__subtitle {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 21.78px;
+    padding-top: 16px;
+}
+@media (max-width: 630px) {
+    .profile__subtitle {
+        padding-top: 14px;
+
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16.94px;
+        padding-left: 15px;
+    }
+}
+
+.profile__title {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+ }
+
+ .profile_active {
+    display: flex;
+  }
