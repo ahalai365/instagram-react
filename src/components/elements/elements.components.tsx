@@ -1,12 +1,19 @@
 import React from 'react';
+import { TCardData } from '../../types';
+import { Element } from './../element/element.components'
 import './elements.styles.css';
 
-type TContainerProps = {
-    children: React.ReactNode;
+type TElementsProps = {
+    cards: Array<TCardData>;
+    // onLike: (cardId: TCardData['id']) => void;
 };
 
-export function Elements(props: TContainerProps) {
+export function Elements(props: TElementsProps) {
     return (
-        <section className="elements">{props.children}</section>
+        <section className="elements">
+            {props.cards.map((card: TCardData) => <Element card={card} />)}
+        </section>
     )
 }
+
+// {props.cards.map((card: TCardData) => <Element key={card.id} onLike={props.onLike} card={card} />)}
