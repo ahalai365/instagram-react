@@ -5,15 +5,13 @@ import './elements.styles.css';
 
 type TElementsProps = {
     cards: Array<TCardData>;
-    // onLike: (cardId: TCardData['id']) => void;
+    onLike: (cardId: TCardData['id']) => void;
 };
 
 export function Elements(props: TElementsProps) {
     return (
         <section className="elements">
-            {props.cards.map((card: TCardData) => <Element card={card} />)}
+            {props.cards.map((card: TCardData) => <Element key={card.id} onLike={props.onLike} card={card} />)}
         </section>
     )
 }
-
-// {props.cards.map((card: TCardData) => <Element key={card.id} onLike={props.onLike} card={card} />)}

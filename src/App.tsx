@@ -14,72 +14,54 @@ import { Elements } from './components/elements/elements.components'
 import { Footer } from './components/footer/footer.components';
 import { Profile } from './components/profile/profile.components';
 
-function Preview(props: any) {
-  if (true) {
-    return <div>123213</div>
-  } else {
-    return null;
-  }
-}
-
 function App() {
   const [cardsArr, setCardsArr] = useState<Array<TCardData>>([]);
   const [previewCard, setPreviewCard] = useState<TCardData | void>();
 
+  function onPreview(cardData: TCardData): void {
+    setPreviewCard(cardData);
+  }
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  function handleRequestOpen() {
+    setIsOpen(true)
+  }
+
+  function handleRequestClose() {
+    setIsOpen(false)
+  }
+
   useEffect(() => {
-    api.getAllcards().then((cards) => {
-      setCardsArr(cards);
+    api.getAllcards().then((response) => {
+      console.log(response.card)
+      setCardsArr(response.card);
     });
   }, []);
 
+  function onLikeCard(cardId: TCardData['id']) {
+    const newCards = cardsArr.map((card: TCardData) => {
+      if (card.id !== cardId) {
+        return card;
+      }
+      return {
+        ...card,
+        isLiked: !card.likes
+      }
+    });
 
-  // <Elements cards={cardsArr} onLike={onLikeCard} />
-  // function onLikeCard(cardId: TCardData['id']) {
-  //   const newCards = cardsArr.map((card: TCardData) => {
-  //     if (card.id !== cardId) {
-  //       return card;
-  //     }
-  //     return {
-  //       ...card,
-  //       isLiked: !card.isLiked
-  //     }
-  //   });
-
-  //   setCardsArr(newCards);
-  // }
-
-  // function onPreview(cardData: TCardData): void {
-  //   setPreviewCard(cardData);
-  // }
-
-  // const [isOpen, setIsOpen] = useState<boolean>(true);
-  // function handleRequestClose() {
-  //   setIsOpen(false)
-  // }
-
-  // const [count, setCount] = useState<number>(5);
-  // function upCount() {
-  //  let newCount = count + 1;
-  //  setCount(newCount);
-  // }
-
-  // <Modal isOpen={isOpen} onRequestClose={handleRequestClose}>
-  //   <form>LogIn</form>
-  // </Modal>
-  // <Modal count={count} upCount={upCount}>
-  //   <form>Счетчик</form>
-  // </Modal>
-
+    setCardsArr(newCards);
+  }
   return (
     <Page>
-      <Preview card={previewCard} onClose={function() {}} />
-      
-      <Header/>
+      {/* <Preview card={previewCard} setPreviewOpen={onPreview} /> */}
+      <Modal isOpen={isOpen} setPopupClose={handleRequestClose}  />
+      <Header setPopupOpen={handleRequestOpen} />
       <Content>
-        <Profile/>
-        <Elements cards={cardsArr} />
+        <Profile setPopupOpen={handleRequestOpen} />
+        <Elements cards={cardsArr} onLike={onLikeCard} />
       </Content>
-      <Footer/>
+      <Footer />
     </Page>
   );
 }

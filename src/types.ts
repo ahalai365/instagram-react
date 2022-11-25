@@ -58,7 +58,8 @@ export type TUserDataResponse = {
 
 export type TCardDataResponse = {
   succes: true;
-  user: TCardData;
+  card: Array<TCardData>;
 } | {
   succes: false;
+  card: Array<TCardData>;
 }
