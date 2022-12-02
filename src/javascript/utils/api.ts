@@ -9,8 +9,6 @@ import { TDeleteCardResponse } from './../../types';
 import { TUserDataResponse } from './../../types';
 import { TCardDataResponse } from './../../types';
 
-
-
 class Api {
   private _baseUrl: string;
   private _headers: any;
@@ -61,9 +59,9 @@ class Api {
 
   _processResponse<T>(response: Response): Promise<T> {
     if (response.ok) {
-      return response.json()
+      return response.json();
     } else {
-      return Promise.reject()
+      return Promise.reject();
     }
   }
 
@@ -80,7 +78,7 @@ class Api {
   }
 
   getAllcards(): Promise<TCardDataResponse> {
-    return this._get<TCardDataResponse>(`${this._baseUrl}/cards`);
+    return this._get <TCardDataResponse>(`${this._baseUrl}/cards`);
   }
 
   createCard(data: TCardData): Promise<TCardData> {

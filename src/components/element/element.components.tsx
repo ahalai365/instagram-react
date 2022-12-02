@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import card from './../../images/jepa.jpg';
 import trashBasket from './../../images/trash-basket.png';
 import dislike from './../../images/dislike.png';
 import './element.components.css';
@@ -8,6 +7,7 @@ import { TCardData } from '../../types';
 type TElementProps = {
     card: TCardData;
     onLike: (cardId: TCardData['id']) => void;
+    onPreview: (card: TCardData) => void;
 }
 
 export function Element(props: TElementProps) {
@@ -23,9 +23,13 @@ export function Element(props: TElementProps) {
         props.onLike(props.card.id);
     }
 
+    function handlePreview(): void {
+        props.onPreview(props.card)
+    }
+
     return (
         <div className="element">
-            <img className="element__img" src={card}/>
+            <img className="element__img" src={props.card.url} onClick={handlePreview} />
             <img className="element__delete" src={trashBasket}/>
             <div className="element__footer">
                 <h3 className="element__title">{props.card.title}</h3>
