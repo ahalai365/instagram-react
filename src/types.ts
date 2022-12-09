@@ -16,10 +16,10 @@ export type TUserData = {
 }
 
 export type TUserResponse = {
-  succes: true;
+  success: true;
   userId: string;
 } | {
-  succes: false;
+  success: false;
   error: string;
 }
 
@@ -29,36 +29,36 @@ export type TLoginUserData = {
 }
 
 export type TLoginResponse = {
-  succes: true;
+  success: true;
   token: string;
 } | {
-  succes: false;
+  success: false;
 }
 
 export type TLikeCardResponse = {
-  succes: true;
+  success: true;
   likes: Array<string>
 } | {
-  succes: false;
+  success: false;
 }
 
 export type TDeleteCardResponse = {
-  succes: true;
+  success: true;
 } | {
-  succes: false;
+  success: false;
   error: string;
 }
 
 export type TUserDataResponse = {
-  succes: true;
+  success: true;
   user: TUserData;
 } | {
-  succes: false;
+  success: false;
 }
 
-export type TCardDataResponse = {
-  succes: true;
-  cards: Array<TCardData>;
-} | {
-  succes: false;
+export type TCardDataResponse = Array<TCardData>;
+
+export type TProfileData = {
+  name: string;
+  description: string;
 }

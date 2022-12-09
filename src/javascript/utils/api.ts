@@ -78,7 +78,7 @@ class Api {
   }
 
   getAllcards(): Promise<TCardDataResponse> {
-    return this._get <TCardDataResponse>(`${this._baseUrl}/cards`);
+    return this._get<TCardDataResponse>(`${this._baseUrl}/cards`);
   }
 
   createCard(data: TCardData): Promise<TCardData> {
