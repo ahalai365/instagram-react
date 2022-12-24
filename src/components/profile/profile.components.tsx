@@ -1,9 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./profile.styles.css";
+import "./../modal/modal.styles.css";
 import "./../opacity/opacity.styles.css";
 import jepa from "./../../images/jepa.jpg";
 import { Modal } from "./../modal/modal.component";
 import { ProfileDataContext } from "../../context";
+import { Form, Field, Submit } from "./../form/form.components";
 
 type TProfileEditFormProps = {
   onRequestClose: () => void;
@@ -13,6 +15,33 @@ type AddCardForm = {
   onRequestClose: () => void;
 };
 
+function validator() {
+  // true if error,
+  // false if correct
+}
+
+const validators = {
+  name: {
+    required: (value: string): boolean => {
+      return value === "";
+    },
+    minLength: (value: string): boolean => {
+      return value.length > 0 && value.length <= 3;
+    },
+    maxLength: (value: string): boolean => {
+      return value.length > 20;
+    },
+  },
+  description: {
+    required: (value: string): boolean => {
+      return value === "";
+    },
+    maxLength: (value: string): boolean => {
+      return value.length > 20;
+    },
+  },
+};
+
 function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
   const profileData = useContext(ProfileDataContext);
   const [newProfileData, setNewProfileData] = useState({
@@ -20,10 +49,22 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
     description: profileData.data.description,
   });
 
+  const [errors, setErrors] = useState({
+    name: {
+      required: false,
+      minLength: false,
+      maxLength: false,
+    },
+    description: {
+      required: false,
+      maxLength: false,
+    },
+  });
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const inputName = e.target.name;
     const inputValue = e.target.value;
-    
+
     setNewProfileData((prevValue) => {
       return {
         ...prevValue,
@@ -38,6 +79,85 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
     props.onRequestClose();
   }
 
+  useEffect(
+    function validateInputs() {
+      const { name, description } = newProfileData;
+
+      const nameValidationResult = Object.keys(validators.name)
+        .map((errorKey) => {
+          const errorResult = validators.name[errorKey](name);
+
+          return { [errorKey]: errorResult };
+        })
+        .reduce((acc, el) => ({ ...acc, ...el }), {}) as typeof errors.name;
+
+      const descriptionValidationResult = Object.keys(validators.description)
+        .map((errorKey) => {
+          const errorResult = validators.description[errorKey](description);
+
+          return { [errorKey]: errorResult };
+        })
+        .reduce(
+          (acc, el) => ({ ...acc, ...el }),
+          {}
+        ) as typeof errors.description;
+
+      setErrors({
+        name: nameValidationResult,
+        description: descriptionValidationResult,
+      });
+    },
+    [newProfileData, setErrors]
+  );
+
+  const isNameInvalid = Object.values(errors.name).some(Boolean);
+  const isDescriptionInvalid = Object.values(errors.description).some(Boolean);
+  const isSubmitDisabled = isNameInvalid || isDescriptionInvalid;
+  
+  return (
+    <Form validators={validators}>
+      <Field name="name">
+        {({ onChange, errors, ...inputProps }) => {
+          console.log(...inputProps)
+          return (
+            <div>
+              <input
+                onChange={(e) => onChange(e.target.value)}
+                {...inputProps}
+              />
+              {errors.required && <div className="popup__error">ж</div>}
+              {errors.minLength && <div className="popup__error">п</div>}
+              {errors.maxLength && <div className="popup__error">ч</div>}
+            </div>
+          );
+        }}
+      </Field>
+
+      <Field name="description">
+        {({ onChange, errors, ...inputProps }) => {
+          return (
+            <div>
+              <input
+                onChange={(e) => onChange(e.target.value)}
+                {...inputProps}
+              />
+              {errors.required && <div className="popup__error">ш</div>}
+              {errors.maxLength && <div className="popup__error">ц</div>}
+            </div>
+          );
+        }}
+      </Field>
+
+      <Submit>
+        {(isFormInvalid: boolean) => (
+          <button disabled={isFormInvalid} type="submit">
+            submit
+          </button>
+        )}
+      </Submit>
+    </Form>
+  );
+
   return (
     <>
       <div className="popup__title">Редактировать профиль</div>
@@ -51,7 +171,15 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
           value={newProfileData.name}
           onChange={handleChange}
         />
-        {/* {!nameValid && <div className="popup__error" >ERROR</div>} */}
+        {errors.name.required && (
+          <div className="popup__error">Укажите имя</div>
+        )}
+        {errors.name.minLength && (
+          <div className="popup__error">Имя слишком короткое</div>
+        )}
+        {errors.name.maxLength && (
+          <div className="popup__error">Имя слишком длинное</div>
+        )}
         <input
           type="text"
           name="description"
@@ -61,10 +189,11 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
           onChange={handleChange}
         />
 
-        <button 
-          name="submitProfile" 
+        <button
+          name="submitProfile"
           className="popup__submit opacity"
-        >  
+          disabled={isSubmitDisabled}
+        >
           Сохранить
         </button>
       </form>
@@ -76,15 +205,15 @@ function AddCardForm(props: AddCardForm): JSX.Element {
   const [newCard, setNewCard] = useState({
     id: `${Math.floor(Math.random() * 1000)}`,
     likes: [],
-    title: '',
-    url: '',
-    userId: 'currentUser',
+    title: "",
+    url: "",
+    userId: "currentUser",
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const inputName = e.target.name;
     const inputValue = e.target.value;
-    
+
     setNewCard((prevValue) => {
       return {
         ...prevValue,
@@ -98,7 +227,7 @@ function AddCardForm(props: AddCardForm): JSX.Element {
     console.log(newCard);
     props.onRequestClose();
   }
-  
+
   return (
     <>
       <div className="popup__title">Добавить место</div>
