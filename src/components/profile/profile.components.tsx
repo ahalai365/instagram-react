@@ -1,11 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./profile.styles.css";
 import "./../modal/modal.styles.css";
 import "./../opacity/opacity.styles.css";
 import jepa from "./../../images/jepa.jpg";
 import { Modal } from "./../modal/modal.component";
 import { ProfileDataContext } from "../../context";
-import { Form, Field, Submit } from "./../form/form.components";
+import { profileValidators } from "../../javascript/utils/validators";
+import { Form } from "./../form/form.components";
+import { Submit } from "./../submit/submit.components";
+import { Field } from "./../field/field.component";
 
 type TProfileEditFormProps = {
   onRequestClose: () => void;
@@ -15,50 +18,13 @@ type AddCardForm = {
   onRequestClose: () => void;
 };
 
-function validator() {
-  // true if error,
-  // false if correct
-}
-
-const validators = {
-  name: {
-    required: (value: string): boolean => {
-      return value === "";
-    },
-    minLength: (value: string): boolean => {
-      return value.length > 0 && value.length <= 3;
-    },
-    maxLength: (value: string): boolean => {
-      return value.length > 20;
-    },
-  },
-  description: {
-    required: (value: string): boolean => {
-      return value === "";
-    },
-    maxLength: (value: string): boolean => {
-      return value.length > 20;
-    },
-  },
-};
-
 function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
+  const validators = profileValidators;
+
   const profileData = useContext(ProfileDataContext);
   const [newProfileData, setNewProfileData] = useState({
     name: profileData.data.name,
     description: profileData.data.description,
-  });
-
-  const [errors, setErrors] = useState({
-    name: {
-      required: false,
-      minLength: false,
-      maxLength: false,
-    },
-    description: {
-      required: false,
-      maxLength: false,
-    },
   });
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -73,130 +39,89 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
     });
   }
 
-  function handleSubmit(e: React.FormEvent): void {
-    e.preventDefault();
+  function handleSubmit(): void {
     profileData.setData(newProfileData);
     props.onRequestClose();
   }
-
-  useEffect(
-    function validateInputs() {
-      const { name, description } = newProfileData;
-
-      const nameValidationResult = Object.keys(validators.name)
-        .map((errorKey) => {
-          const errorResult = validators.name[errorKey](name);
-
-          return { [errorKey]: errorResult };
-        })
-        .reduce((acc, el) => ({ ...acc, ...el }), {}) as typeof errors.name;
-
-      const descriptionValidationResult = Object.keys(validators.description)
-        .map((errorKey) => {
-          const errorResult = validators.description[errorKey](description);
-
-          return { [errorKey]: errorResult };
-        })
-        .reduce(
-          (acc, el) => ({ ...acc, ...el }),
-          {}
-        ) as typeof errors.description;
-
-      setErrors({
-        name: nameValidationResult,
-        description: descriptionValidationResult,
-      });
-    },
-    [newProfileData, setErrors]
-  );
-
-  const isNameInvalid = Object.values(errors.name).some(Boolean);
-  const isDescriptionInvalid = Object.values(errors.description).some(Boolean);
-  const isSubmitDisabled = isNameInvalid || isDescriptionInvalid;
-  
-  return (
-    <Form validators={validators}>
-      <Field name="name">
-        {({ onChange, errors, ...inputProps }) => {
-          console.log(...inputProps)
-          return (
-            <div>
-              <input
-                onChange={(e) => onChange(e.target.value)}
-                {...inputProps}
-              />
-              {errors.required && <div className="popup__error">ж</div>}
-              {errors.minLength && <div className="popup__error">п</div>}
-              {errors.maxLength && <div className="popup__error">ч</div>}
-            </div>
-          );
-        }}
-      </Field>
-
-      <Field name="description">
-        {({ onChange, errors, ...inputProps }) => {
-          return (
-            <div>
-              <input
-                onChange={(e) => onChange(e.target.value)}
-                {...inputProps}
-              />
-              {errors.required && <div className="popup__error">ш</div>}
-              {errors.maxLength && <div className="popup__error">ц</div>}
-            </div>
-          );
-        }}
-      </Field>
-
-      <Submit>
-        {(isFormInvalid: boolean) => (
-          <button disabled={isFormInvalid} type="submit">
-            submit
-          </button>
-        )}
-      </Submit>
-    </Form>
-  );
 
   return (
     <>
       <div className="popup__title">Редактировать профиль</div>
 
-      <form className="form__edit" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          className="popup__input"
-          placeholder="Укажате имя"
-          value={newProfileData.name}
-          onChange={handleChange}
-        />
-        {errors.name.required && (
-          <div className="popup__error">Укажите имя</div>
-        )}
-        {errors.name.minLength && (
-          <div className="popup__error">Имя слишком короткое</div>
-        )}
-        {errors.name.maxLength && (
-          <div className="popup__error">Имя слишком длинное</div>
-        )}
-        <input
-          type="text"
-          name="description"
-          className="popup__input"
-          placeholder="Укажите деятильность"
-          value={newProfileData.description}
-          onChange={handleChange}
-        />
+      <Form validators={validators} onSubmit={handleSubmit}>
+        <Field name="name" defaultValue={newProfileData}>
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  name="name"
+                  className="popup__input"
+                  placeholder="Укажате имя"
+                  value={newProfileData.name}
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите имя</div>
+                )}
+                {errors?.minLength && (
+                  <div className="popup__error">Имя слишком короткое</div>
+                )}
+                {errors?.maxLength && (
+                  <div className="popup__error">Имя слишком длинное</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
 
-        <button
-          name="submitProfile"
-          className="popup__submit opacity"
-          disabled={isSubmitDisabled}
-        >
-          Сохранить
-        </button>
-      </form>
+        <Field name="description" defaultValue={newProfileData}>
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  name="description"
+                  className="popup__input"
+                  placeholder="Укажите деятельность"
+                  value={newProfileData.description}
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите деятельность</div>
+                )}
+                {errors?.maxLength && (
+                  <div className="popup__error">Название слишком длинное</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Submit>
+          {(isFormInvalid: boolean) => (
+            <button
+              disabled={isFormInvalid}
+              type="submit"
+              className={
+                isFormInvalid
+                  ? "popup__submit_disable popup__submit opacity"
+                  : "popup__submit opacity"
+              }
+            >
+              Сохранить
+            </button>
+          )}
+        </Submit>
+      </Form>
     </>
   );
 }

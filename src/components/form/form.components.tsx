@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import "./form.styles.css";
 
-const FormContext = React.createContext({});
+export const FormContext = React.createContext({});
 
-export const Form = ({ children, validators }) => {
+export const Form = ({ children, validators, onSubmit }) => {
   const [formValues, setFormValues] = useState({});
   const [formErrors, setFormErrors] = useState({});
   const [isInvalid, setIsInvalid] = useState(true);
@@ -14,10 +14,11 @@ export const Form = ({ children, validators }) => {
       [name]: value,
     }));
   }, []);
+
 // Вызвать onChange на каждый ввод в форму
-  useEffect(() => {
-    onChange(formValues);
-  }, [formValues, onChange]);
+  // useEffect(() => {
+  // }, [formValues]);
+
 // Вызвать валидации на каждый ввод в форму
   useEffect(() => {
     const formKeys = Object.keys(formValues);
@@ -53,7 +54,7 @@ export const Form = ({ children, validators }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSubmit(formValues);
+    onSubmit();
   }
 
   const formContextValue = { 
@@ -67,27 +68,4 @@ export const Form = ({ children, validators }) => {
       {children}
     </FormContext.Provider>
   </form>;
-}
-
-export const Field = ({ children, name }) => {
-  const [value, setValue] = useState('');
-  const { onChangeInput, formErrors } = useContext(FormContext);
-  
-  useEffect(() => {
-    onChangeInput(name, value);
-  }, [value, name, onChangeInput]);
-  return <>
-    {children({
-      type: "text",
-      name,
-      value,
-      onChange: setValue,
-      errors: formErrors[name]
-    })}
-  </>
-}
-
-export const Submit = ({ children }) => {
-  const { isInvalid } = useContext(FormContext);
-  return children(isInvalid);
 }
