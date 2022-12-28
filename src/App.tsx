@@ -72,19 +72,3 @@ function App() {
 }
 
 export default App;
-
-// function useToggle(initialValue: boolean): [boolean, { enable: () => void; disable: () => void; toggle: () => void }] {
-//   const [value, setValue] = useState(initialValue)
-
-//   return [value, {
-//     enable: () => {setValue(true)},
-//     disable: () => {setValue(false)},
-//     toggle: () => {setValue(!value)}
-//   }];
-// }
-
-// const [isOpen, isOpenControls] = useToggle(false);
-
-// <Modal isOpen={isOpen} setPopupClose={isOpenControls.disable}  />
-// <Header setPopupOpen={isOpenControls.enable} />
-//  <Profile setPopupOpen={isOpenControls.enable} />

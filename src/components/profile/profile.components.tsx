@@ -5,7 +5,7 @@ import "./../opacity/opacity.styles.css";
 import jepa from "./../../images/jepa.jpg";
 import { Modal } from "./../modal/modal.component";
 import { ProfileDataContext } from "../../context";
-import { profileValidators } from "../../javascript/utils/validators";
+import { validators } from "../../javascript/utils/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
@@ -19,8 +19,6 @@ type AddCardForm = {
 };
 
 function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
-  const validators = profileValidators;
-
   const profileData = useContext(ProfileDataContext);
   const [newProfileData, setNewProfileData] = useState({
     name: profileData.data.name,
@@ -60,7 +58,6 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
                   }}
                   {...inputProps}
                   type="text"
-                  name="name"
                   className="popup__input"
                   placeholder="Укажате имя"
                   value={newProfileData.name}
@@ -90,7 +87,6 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
                   }}
                   {...inputProps}
                   type="text"
-                  name="description"
                   className="popup__input"
                   placeholder="Укажите деятельность"
                   value={newProfileData.description}
@@ -147,8 +143,7 @@ function AddCardForm(props: AddCardForm): JSX.Element {
     });
   }
 
-  function handleSubmit(e: React.FormEvent): void {
-    e.preventDefault();
+  function handleSubmit(): void {
     console.log(newCard);
     props.onRequestClose();
   }
@@ -157,28 +152,73 @@ function AddCardForm(props: AddCardForm): JSX.Element {
     <>
       <div className="popup__title">Добавить место</div>
 
-      <form className="form__add" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="title"
-          className="popup__input"
-          placeholder="Укажате название"
-          onChange={handleChange}
-        />
-        <input
-          name="url"
-          className="popup__input"
-          placeholder="Укажите путь"
-          onChange={handleChange}
-        />
-        <button
-          name="submitPlace"
-          type="submit"
-          className="popup__submit opacity"
-        >
-          Сохранить
-        </button>
-      </form>
+      <Form validators={validators} onSubmit={handleSubmit}>
+        <Field name="title">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  className="popup__input"
+                  placeholder="Укажате название"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите название</div>
+                )}
+                {errors?.maxLength && (
+                  <div className="popup__error">Название слишком длинное</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Field name="url">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  className="popup__input"
+                  placeholder="Укажите адрес"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите адрес</div>
+                )}
+                {errors?.validateRegExp && (
+                  <div className="popup__error">Это не URL</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Submit>
+          {(isFormInvalid: boolean) => (
+            <button
+              disabled={isFormInvalid}
+              type="submit"
+              className={
+                isFormInvalid
+                  ? "popup__submit_disable popup__submit opacity"
+                  : "popup__submit opacity"
+              }
+            >
+              Сохранить
+            </button>
+          )}
+        </Submit>
+      </Form>
     </>
   );
 }

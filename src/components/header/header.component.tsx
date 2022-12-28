@@ -3,6 +3,10 @@ import logo from "./../../images/logo.png";
 import "./header.styles.css";
 import { Modal } from "./../modal/modal.component";
 import { UserDataContext, LoginDataContext } from "./../../context";
+import { validators } from "../../javascript/utils/validators";
+import { Form } from "./../form/form.components";
+import { Submit } from "./../submit/submit.components";
+import { Field } from "./../field/field.component";
 
 type TSignInForm = {
   onRequestClose: () => void;
@@ -30,8 +34,7 @@ function SignInForm(props: TSignInForm) {
     });
   }
 
-  function handleSubmit(e: React.FormEvent): void {
-    e.preventDefault();
+  function handleSubmit(): void {
     console.log(signInData);
     props.onRequestClose();
   }
@@ -40,30 +43,70 @@ function SignInForm(props: TSignInForm) {
     <>
       <div className="popup__title">Вход</div>
 
-      <form className="form__sign-in" onSubmit={handleSubmit}>
-        <input
-          name="email"
-          className="popup__input"
-          placeholder="Введите e-mail"
-          onChange={handleChange}
-          value={signInData.email}
-        />
-        <input
-          type="password"
-          name="password"
-          className="popup__input"
-          placeholder="Введите пароль"
-          onChange={handleChange}
-          value={signInData.password}
-        />
-        <button
-          name="submitPlace"
-          type="submit"
-          className="popup__sign-in opacity popup__submit"
-        >
-          Войти
-        </button>
-      </form>
+      <Form validators={validators} onSubmit={handleSubmit}>
+        <Field name="email">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  className="popup__input"
+                  placeholder="Введите e-mail"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите почту</div>
+                )}
+                {errors?.validateEmail && (
+                  <div className="popup__error">Это не почта</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Field name="password">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="password"
+                  className="popup__input"
+                  placeholder="Введите пароль"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Введите пароль</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Submit>
+          {(isFormInvalid: boolean) => (
+            <button
+              disabled={isFormInvalid}
+              type="submit"
+              className={
+                isFormInvalid
+                  ? "popup__submit_disable popup__submit opacity"
+                  : "popup__submit opacity"
+              }
+            >
+              Сохранить
+            </button>
+          )}
+        </Submit>
+      </Form>
     </>
   );
 }
@@ -91,7 +134,6 @@ function RegisterForm(props: TRegisterForm) {
   }
 
   function handleSubmit(e: React.FormEvent): void {
-    e.preventDefault();
     console.log(registerData);
     props.onRequestClose();
   }
@@ -100,69 +142,175 @@ function RegisterForm(props: TRegisterForm) {
     <>
       <div className="popup__title">Регистрация</div>
 
-      <form className="form__registration" onSubmit={handleSubmit}>
-        <input
-          name="email"
-          className="popup__input"
-          placeholder="Введите e-mail"
-          onChange={handleChange}
-          value={registerData.email}
-        />
-        <input
-          type="password"
-          name="password"
-          className="popup__input"
-          placeholder="Введите пароль"
-          onChange={handleChange}
-          value={registerData.password}
-        />
-        <input
-          type="password"
-          name="passwordRepit"
-          className="popup__input"
-          placeholder="Повторите пароль"
-          onChange={handleChange}
-          value={registerData.passwordRepit}
-        />
-        <input
-          type="text"
-          name="name"
-          className="popup__input"
-          placeholder="Введите имя"
-          onChange={handleChange}
-          value={registerData.name}
-        />
-        <input
-          type="text"
-          name="description"
-          className="popup__input"
-          placeholder="Введите профессию"
-          onChange={handleChange}
-          value={registerData.description}
-        />
-        <input
-          name="avatar"
-          className="popup__input"
-          placeholder="Укажите путь к аватару"
-          onChange={handleChange}
-          value={registerData.avatar}
-        />
-        <button
-          name="submitPlace"
-          type="submit"
-          className="popup__registration opacity popup__submit"
-        >
-          Зарегистрироваться
-        </button>
-      </form>
+      <Form validators={validators} onSubmit={handleSubmit}>
+        <Field name="email">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  className="popup__input"
+                  placeholder="Введите e-mail"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите почту</div>
+                )}
+                {errors?.validateEmail && (
+                  <div className="popup__error">Это не почта</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Field name="password">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="password"
+                  className="popup__input"
+                  placeholder="Введите пароль"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Введите пароль</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Field name="passwordRepit">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="password"
+                  className="popup__input"
+                  placeholder="Повторите пароль"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Повторите пароль</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Field name="name">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  className="popup__input"
+                  placeholder="Введите имя"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите имя</div>
+                )}
+                {errors?.minLength && (
+                  <div className="popup__error">Имя слишком короткое</div>
+                )}
+                {errors?.maxLength && (
+                  <div className="popup__error">Имя слишком длинное</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Field name="description">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  className="popup__input"
+                  placeholder="Введите профессию"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите деятельность</div>
+                )}
+                {errors?.maxLength && (
+                  <div className="popup__error">Название слишком длинное</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Field name="avatar">
+          {({ onChange, errors, ...inputProps }) => {
+            return (
+              <div>
+                <input
+                  onChange={(e) => {
+                    handleChange(e);
+                    onChange(e.target.value);
+                  }}
+                  {...inputProps}
+                  type="text"
+                  className="popup__input"
+                  placeholder="Укажите путь к аватару"
+                />
+                {errors?.required && (
+                  <div className="popup__error">Укажите адрес</div>
+                )}
+                {errors?.validateRegExp && (
+                  <div className="popup__error">Это не URL</div>
+                )}
+              </div>
+            );
+          }}
+        </Field>
+
+        <Submit>
+          {(isFormInvalid: boolean) => (
+            <button
+              disabled={isFormInvalid}
+              type="submit"
+              className={
+                isFormInvalid
+                  ? "popup__submit_disable popup__submit opacity"
+                  : "popup__submit opacity"
+              }
+            >
+              Сохранить
+            </button>
+          )}
+        </Submit>
+      </Form>
     </>
   );
 }
 
 export function Header() {
-  const userData = useContext(UserDataContext);
-  const loginData = useContext(LoginDataContext);
-
   const [signInIsOpen, setSignInIsOpen] = useState(false);
   const [registerIsOpen, setRegisterIsOpen] = useState(false);
 

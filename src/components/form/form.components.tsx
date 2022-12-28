@@ -15,10 +15,6 @@ export const Form = ({ children, validators, onSubmit }) => {
     }));
   }, []);
 
-// Вызвать onChange на каждый ввод в форму
-  // useEffect(() => {
-  // }, [formValues]);
-
 // Вызвать валидации на каждый ввод в форму
   useEffect(() => {
     const formKeys = Object.keys(formValues);
