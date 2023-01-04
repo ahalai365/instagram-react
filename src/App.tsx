@@ -63,6 +63,7 @@ function App() {
           <Content>
             <Profile />
             <Elements />
+            
           </Content>
           <Footer />
         </Page>

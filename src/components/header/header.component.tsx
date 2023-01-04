@@ -2,8 +2,10 @@ import React, { useContext, useState } from "react";
 import logo from "./../../images/logo.png";
 import "./header.styles.css";
 import { Modal } from "./../modal/modal.component";
-import { UserDataContext, LoginDataContext } from "./../../context";
-import { validators } from "../../javascript/utils/validators";
+import {
+  signInValidator,
+  signUpValidator,
+} from "../../javascript/utils/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
@@ -17,24 +19,9 @@ type TRegisterForm = {
 };
 
 function SignInForm(props: TSignInForm) {
-  const [signInData, setSignInData] = useState({
-    email: "",
-    password: "",
-  });
+  const validators = signInValidator;
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const inputName = e.target.name;
-    const inputValue = e.target.value;
-
-    setSignInData((prevValue) => {
-      return {
-        ...prevValue,
-        [inputName]: inputValue,
-      };
-    });
-  }
-
-  function handleSubmit(): void {
+  function handleSubmit(signInData): void {
     console.log(signInData);
     props.onRequestClose();
   }
@@ -45,14 +32,10 @@ function SignInForm(props: TSignInForm) {
 
       <Form validators={validators} onSubmit={handleSubmit}>
         <Field name="email">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
@@ -70,14 +53,10 @@ function SignInForm(props: TSignInForm) {
         </Field>
 
         <Field name="password">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="password"
                   className="popup__input"
@@ -112,28 +91,9 @@ function SignInForm(props: TSignInForm) {
 }
 
 function RegisterForm(props: TRegisterForm) {
-  const [registerData, setRegisterData] = useState({
-    email: "",
-    password: "",
-    passwordRepit: "",
-    name: "",
-    description: "",
-    avatar: "",
-  });
+  const validators = signUpValidator;
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const inputName = e.target.name;
-    const inputValue = e.target.value;
-
-    setRegisterData((prevValue) => {
-      return {
-        ...prevValue,
-        [inputName]: inputValue,
-      };
-    });
-  }
-
-  function handleSubmit(e: React.FormEvent): void {
+  function handleSubmit(registerData): void {
     console.log(registerData);
     props.onRequestClose();
   }
@@ -142,16 +102,12 @@ function RegisterForm(props: TRegisterForm) {
     <>
       <div className="popup__title">Регистрация</div>
 
-      <Form validators={validators} onSubmit={handleSubmit}>
+      <Form validators={validators} onSubmit={handleSubmit} >
         <Field name="email">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
@@ -168,15 +124,11 @@ function RegisterForm(props: TRegisterForm) {
           }}
         </Field>
 
-        <Field name="password">
-          {({ onChange, errors, ...inputProps }) => {
+        <Field name="password" id="password">
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="password"
                   className="popup__input"
@@ -191,14 +143,10 @@ function RegisterForm(props: TRegisterForm) {
         </Field>
 
         <Field name="passwordRepit">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="password"
                   className="popup__input"
@@ -213,14 +161,10 @@ function RegisterForm(props: TRegisterForm) {
         </Field>
 
         <Field name="name">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
@@ -241,14 +185,10 @@ function RegisterForm(props: TRegisterForm) {
         </Field>
 
         <Field name="description">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
@@ -266,14 +206,10 @@ function RegisterForm(props: TRegisterForm) {
         </Field>
 
         <Field name="avatar">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="text"
                   className="popup__input"

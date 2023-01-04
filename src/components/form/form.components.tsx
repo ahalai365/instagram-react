@@ -1,14 +1,22 @@
 import React, { useState, useCallback, useContext, useEffect } from "react";
 import "./form.styles.css";
+import { TValidators } from "./../../javascript/utils/validators"
+
+
+type TFormProps = {
+  children: JSX.Element | Array<JSX.Element>;
+  validators: TValidators;
+  onSubmit: (values: Record<string, string>) => void;
+}
 
 export const FormContext = React.createContext({});
 
-export const Form = ({ children, validators, onSubmit }) => {
+export const Form = ({ children, validators, onSubmit }: TFormProps) => {
   const [formValues, setFormValues] = useState({});
-  const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState<Record<string, Record<string, boolean>>>({});
   const [isInvalid, setIsInvalid] = useState(true);
 
-  const onChangeInput = useCallback((name, value) => {
+  const onChangeInput = useCallback((name: string, value: string): void => {
     setFormValues(prevValues =>({
       ...prevValues,
       [name]: value,
@@ -48,9 +56,9 @@ export const Form = ({ children, validators, onSubmit }) => {
     setIsInvalid(false);
   }, [formErrors, setIsInvalid]);
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    onSubmit();
+    onSubmit(formValues);
   }
 
   const formContextValue = { 
@@ -59,7 +67,7 @@ export const Form = ({ children, validators, onSubmit }) => {
     formErrors,
   };
 
-  return <form onSubmit={handleSubmit}>
+  return <form onSubmit={handleSubmit} >
     <FormContext.Provider value={ formContextValue }>
       {children}
     </FormContext.Provider>
