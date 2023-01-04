@@ -26,7 +26,7 @@ function maxLength(value: string): boolean {
 function passwordRepit(value: string): boolean {
   let password: string = document.getElementById("password").value;
 
-  if (value !== password) {
+  if (value === password) {
     return false;
   }
 
@@ -102,56 +102,36 @@ export const signUpValidator: TValidators = {
     required,
     passwordRepit,
   },
+
+  avatar: {
+    required,
+    validateUrl,
+  },
 };
 // Форма редактирования профиля
-
-// Форма добавления фотографии
-
-export const validators: TValidators = {
-  // Имя пользователя
+export const profileEditValidator: TValidators = {
   name: {
     required,
     minLength,
     maxLength,
   },
 
-  // Профессия пользователя
   description: {
     required,
     maxLength,
   },
+}
 
-  // Название фотографии
-  title: {
+// Форма добавления фотографии
+export const addCardValidator: TValidators = {
+  name: {
     required,
+    minLength,
     maxLength,
   },
 
-  // URL фотографии
   url: {
     required,
     validateUrl,
   },
-
-  // email
-  email: {
-    required,
-    validateEmail,
-  },
-
-  // Пароль
-  password: {
-    required,
-  },
-
-  // Повтор пароля
-  passwordRepit: {
-    required,
-  },
-
-  // Аватар
-  avatar: {
-    required,
-    validateUrl,
-  },
-};
+}

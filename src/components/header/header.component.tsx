@@ -9,6 +9,7 @@ import {
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
+import { TUserData } from "./../../types";
 
 type TSignInForm = {
   onRequestClose: () => void;
@@ -21,7 +22,7 @@ type TRegisterForm = {
 function SignInForm(props: TSignInForm) {
   const validators = signInValidator;
 
-  function handleSubmit(signInData): void {
+  function handleSubmit(signInData: Record<string, string>): void {
     console.log(signInData);
     props.onRequestClose();
   }
@@ -93,7 +94,7 @@ function SignInForm(props: TSignInForm) {
 function RegisterForm(props: TRegisterForm) {
   const validators = signUpValidator;
 
-  function handleSubmit(registerData): void {
+  function handleSubmit(registerData: Record<string, string>): void {
     console.log(registerData);
     props.onRequestClose();
   }
@@ -154,6 +155,9 @@ function RegisterForm(props: TRegisterForm) {
                 />
                 {errors?.required && (
                   <div className="popup__error">Повторите пароль</div>
+                )}
+                {errors?.passwordRepit && (
+                  <div className="popup__error">Пароль не совпадает</div>
                 )}
               </div>
             );

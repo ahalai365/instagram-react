@@ -5,13 +5,15 @@ import "./../opacity/opacity.styles.css";
 import jepa from "./../../images/jepa.jpg";
 import { Modal } from "./../modal/modal.component";
 import { ProfileDataContext } from "../../context";
-import { validators } from "../../javascript/utils/validators";
+import { profileEditValidator, addCardValidator } from "./../../javascript/utils/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
+import { TProfileData } from "./../../types";
 
 type TProfileEditFormProps = {
   onRequestClose: () => void;
+  setNewProfileData: (data: TProfileData) => void;
 };
 
 type AddCardForm = {
@@ -19,26 +21,28 @@ type AddCardForm = {
 };
 
 function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
+  const validators = profileEditValidator;
+
   const profileData = useContext(ProfileDataContext);
   const [newProfileData, setNewProfileData] = useState({
     name: profileData.data.name,
     description: profileData.data.description,
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const inputName = e.target.name;
-    const inputValue = e.target.value;
+  // function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  //   const inputName = e.target.name;
+  //   const inputValue = e.target.value;
 
-    setNewProfileData((prevValue) => {
-      return {
-        ...prevValue,
-        [inputName]: inputValue,
-      };
-    });
-  }
+  //   setNewProfileData((prevValue) => {
+  //     return {
+  //       ...prevValue,
+  //       [inputName]: inputValue,
+  //     };
+  //   });
+  // }
 
-  function handleSubmit(): void {
-    profileData.setData(newProfileData);
+  function handleSubmit(newProfileData: Record<string, string>): void {
+    setNewProfileData(newProfileData);
     props.onRequestClose();
   }
 
@@ -47,20 +51,20 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
       <div className="popup__title">Редактировать профиль</div>
 
       <Form validators={validators} onSubmit={handleSubmit}>
-        <Field name="name" defaultValue={newProfileData}>
-          {({ onChange, errors, ...inputProps }) => {
+        <Field name="name" defaultValue={profileData.data}>
+          {({ errors, value, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
+                  // onChange={(e) => {
+                  //   handleChange(e);
+                  //   onChange(setNewProfileData(e.target.value));
+                  // }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
                   placeholder="Укажате имя"
-                  value={newProfileData.name}
+                  value={value}
                 />
                 {errors?.required && (
                   <div className="popup__error">Укажите имя</div>
@@ -76,20 +80,20 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
           }}
         </Field>
 
-        <Field name="description" defaultValue={newProfileData}>
-          {({ onChange, errors, ...inputProps }) => {
+        <Field name="description" defaultValue={profileData.data}>
+          {({ errors, value, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
+                  // onChange={(e) => {
+                  //   handleChange(e);
+                  //   onChange(e.target.value);
+                  // }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
                   placeholder="Укажите деятельность"
-                  value={newProfileData.description}
+                  value={value}
                 />
                 {errors?.required && (
                   <div className="popup__error">Укажите деятельность</div>
@@ -123,6 +127,8 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
 }
 
 function AddCardForm(props: AddCardForm): JSX.Element {
+  const validators = addCardValidator;
+
   const [newCard, setNewCard] = useState({
     id: `${Math.floor(Math.random() * 1000)}`,
     likes: [],
@@ -130,7 +136,7 @@ function AddCardForm(props: AddCardForm): JSX.Element {
     url: "",
     userId: "currentUser",
   });
-
+  
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const inputName = e.target.name;
     const inputValue = e.target.value;
@@ -225,6 +231,10 @@ function AddCardForm(props: AddCardForm): JSX.Element {
 
 export function Profile() {
   const profileData = useContext(ProfileDataContext);
+  // const [newProfileData, setNewProfileData] = useState({
+  //   name: profileData.data.name,
+  //   description: profileData.data.description,
+  // });
 
   const [editIsOpen, setEditIsOpen] = useState(false);
   const [addCardisOpen, setAddCardisOpen] = useState(false);
@@ -232,7 +242,9 @@ export function Profile() {
   return (
     <>
       <Modal isOpen={editIsOpen} onRequestClose={() => setEditIsOpen(false)}>
-        <ProfileEditForm onRequestClose={() => setEditIsOpen(false)} />
+        <ProfileEditForm onRequestClose={() => setEditIsOpen(false)}
+        //  setNewProfileData={setNewProfileData}
+         />
       </Modal>
 
       <Modal
