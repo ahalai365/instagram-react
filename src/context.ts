@@ -25,3 +25,8 @@ export const LoginDataContext = createContext<{
   setData: (data: TLoginUserData) => void;
 }>();
 
+// @ts-ignore
+export const NewCardContext = createContext<{
+  data: TCardData;
+  setData: (data: TCardData) => void;
+}>();

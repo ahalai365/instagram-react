@@ -26,6 +26,7 @@
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: center center;
+  cursor: pointer;
 }
 @media (max-width: 600px) {
   .popup__close {

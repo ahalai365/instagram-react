@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { FormContext } from "../form/form.components";
 import "./../field/field.styles.css";
 
@@ -13,10 +13,7 @@ type TFieldChildProps = {
 
 type TFieldProps = {
   name: string;
-  defaultValue?: {
-    name: string;
-    description: string;
-  };
+  defaultValue?: string;
   children: (args: TFieldChildProps) => JSX.Element;
   id?: string;
 }
@@ -24,8 +21,6 @@ type TFieldProps = {
 export const Field = ({ children, name, defaultValue, id }: TFieldProps) => {
   const [value, setValue] = useState(defaultValue ? defaultValue : "");
   const { onChangeInput, formErrors } = useContext(FormContext);
-
-  console.log(defaultValue)
 
   function onChange(e) {
     onChangeInput(name, e.target.value);

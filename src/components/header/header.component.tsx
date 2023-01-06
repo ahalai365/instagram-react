@@ -15,11 +15,11 @@ type TSignInForm = {
   onRequestClose: () => void;
 };
 
-type TRegisterForm = {
+type TSignUPForm = {
   onRequestClose: () => void;
 };
 
-function SignInForm(props: TSignInForm) {
+export function SignInForm(props: TSignInForm) {
   const validators = signInValidator;
 
   function handleSubmit(signInData: Record<string, string>): void {
@@ -82,7 +82,7 @@ function SignInForm(props: TSignInForm) {
                   : "popup__submit opacity"
               }
             >
-              Сохранить
+              Войти
             </button>
           )}
         </Submit>
@@ -91,7 +91,7 @@ function SignInForm(props: TSignInForm) {
   );
 }
 
-function RegisterForm(props: TRegisterForm) {
+export function SignUPForm(props: TSignUPForm) {
   const validators = signUpValidator;
 
   function handleSubmit(registerData: Record<string, string>): void {
@@ -266,7 +266,7 @@ export function Header() {
         isOpen={registerIsOpen}
         onRequestClose={() => setRegisterIsOpen(false)}
       >
-        <RegisterForm onRequestClose={() => setSignInIsOpen(false)} />
+        <SignUPForm onRequestClose={() => setSignInIsOpen(false)} />
       </Modal>
       <header className="header">
         <img className="logo" src={logo} />

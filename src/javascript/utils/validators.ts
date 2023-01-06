@@ -24,7 +24,7 @@ function maxLength(value: string): boolean {
 }
 
 function passwordRepit(value: string): boolean {
-  let password: string = document.getElementById("password").value;
+  let password = document.getElementById("password").value;
 
   if (value === password) {
     return false;
@@ -120,7 +120,7 @@ export const profileEditValidator: TValidators = {
     required,
     maxLength,
   },
-}
+};
 
 // Форма добавления фотографии
 export const addCardValidator: TValidators = {
@@ -134,4 +134,4 @@ export const addCardValidator: TValidators = {
     required,
     validateUrl,
   },
-}
+};

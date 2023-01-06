@@ -10,13 +10,22 @@ import { Content } from "./components/content/content.components";
 import { Elements } from "./components/elements/elements.components";
 import { Footer } from "./components/footer/footer.components";
 import { Profile } from "./components/profile/profile.components";
-import { ProfileDataContext, CardArrContext } from "./context";
+import { Modal } from "./components/modal/modal.component"
+import { SignInForm } from "./components/header/header.component";
+import { ProfileDataContext, CardArrContext, NewCardContext } from "./context";
 
 function App() {
-  const [cardsArr, setCardsArr] = useState<Array<TCardData>>([])
+  const [cardsArr, setCardsArr] = useState<Array<TCardData>>([]);
   const [profileData, setProfileData] = useState<TProfileData>({
     name: "Заглушка",
     description: "Заглушка",
+  });
+  const [newCardData, setNewCardData] = useState<TCardData>({
+    id: `${Math.floor(Math.random() * 1000)}`,
+    likes: [],
+    title: "",
+    url: "",
+    userId: "currentUser",
   });
 
   useEffect(() => {
@@ -27,19 +36,19 @@ function App() {
     });
   }, []);
 
-  function onLikeCard(cardId: TCardData["id"]) {
-    const newCards = cardsArr.map((card: TCardData) => {
-      if (card.id !== cardId) {
-        return card;
-      }
-      return {
-        ...card,
-        isLiked: !card.likes,
-      };
-    });
+  // function onLikeCard(cardId: TCardData["id"]) {
+  //   const newCards = cardsArr.map((card: TCardData) => {
+  //     if (card.id !== cardId) {
+  //       return card;
+  //     }
+  //     return {
+  //       ...card,
+  //       isLiked: !card.likes,
+  //     };
+  //   });
 
-    setCardsArr(newCards);
-  }
+  //   setCardsArr(newCards);
+  // }
 
   return (
     <ProfileDataContext.Provider
@@ -58,15 +67,26 @@ function App() {
           },
         }}
       >
-        <Page>
-          <Header />
-          <Content>
-            <Profile />
-            <Elements />
-            
-          </Content>
-          <Footer />
-        </Page>
+        <NewCardContext.Provider
+          value={{
+            data: newCardData,
+            setData: (data) => {
+              setNewCardData(data);
+            },
+          }}
+        >
+          <Page>
+            <Header />
+            <Content>
+              <Modal isOpen={true} notAutorized={true}>
+                <SignInForm/>
+              </Modal>
+              {/* <Profile />
+              <Elements /> */}
+            </Content>
+            <Footer />
+          </Page>
+        </NewCardContext.Provider>
       </CardArrContext.Provider>
     </ProfileDataContext.Provider>
   );

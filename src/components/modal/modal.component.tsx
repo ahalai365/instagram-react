@@ -9,6 +9,7 @@ type TModalProps = {
   onRequestClose: () => void;
   children?: React.ReactElement;
   contentClassName?: string;
+  notAutorized?: boolean;
 };
 
 export function Modal(props: TModalProps) {
@@ -24,17 +25,21 @@ export function Modal(props: TModalProps) {
 
   return createPortal(
     <div className={`popup ${props.isOpen ? "popup_active" : ""}`}>
-      <div className="popup__overlay" onClick={props.onRequestClose}></div>
+      {props?.notAutorized || (
+        <div className="popup__overlay" onClick={props.onRequestClose}></div>
+      )}
       <div
         className={
           props.contentClassName ? props.contentClassName : "popup__content"
         }
       >
         {props.children}
-        <button
-          className="popup__close opacity"
-          onClick={props.onRequestClose}
-        ></button>
+        {props?.notAutorized || (
+          <button
+            className="popup__close opacity"
+            onClick={props.onRequestClose}
+          ></button>
+        )}
       </div>
     </div>,
     modal

@@ -4,16 +4,15 @@ import "./../modal/modal.styles.css";
 import "./../opacity/opacity.styles.css";
 import jepa from "./../../images/jepa.jpg";
 import { Modal } from "./../modal/modal.component";
-import { ProfileDataContext } from "../../context";
+import { ProfileDataContext, NewCardContext } from "../../context";
 import { profileEditValidator, addCardValidator } from "./../../javascript/utils/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
-import { TProfileData } from "./../../types";
+import { TCardData, TProfileData } from "./../../types";
 
 type TProfileEditFormProps = {
   onRequestClose: () => void;
-  setNewProfileData: (data: TProfileData) => void;
 };
 
 type AddCardForm = {
@@ -22,27 +21,11 @@ type AddCardForm = {
 
 function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
   const validators = profileEditValidator;
-
   const profileData = useContext(ProfileDataContext);
-  const [newProfileData, setNewProfileData] = useState({
-    name: profileData.data.name,
-    description: profileData.data.description,
-  });
 
-  // function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-  //   const inputName = e.target.name;
-  //   const inputValue = e.target.value;
-
-  //   setNewProfileData((prevValue) => {
-  //     return {
-  //       ...prevValue,
-  //       [inputName]: inputValue,
-  //     };
-  //   });
-  // }
-
-  function handleSubmit(newProfileData: Record<string, string>): void {
-    setNewProfileData(newProfileData);
+  function handleSubmit(newProfileData: TProfileData): void {
+    profileData.setData(newProfileData);
+    console.log(newProfileData)
     props.onRequestClose();
   }
 
@@ -50,16 +33,12 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
     <>
       <div className="popup__title">Редактировать профиль</div>
 
-      <Form validators={validators} onSubmit={handleSubmit}>
-        <Field name="name" defaultValue={profileData.data}>
+      <Form validators={validators} onSubmit={handleSubmit} defaultValue={profileData.data}>
+        <Field name="name" defaultValue={profileData.data.name}>
           {({ errors, value, ...inputProps }) => {
             return (
               <div>
                 <input
-                  // onChange={(e) => {
-                  //   handleChange(e);
-                  //   onChange(setNewProfileData(e.target.value));
-                  // }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
@@ -80,15 +59,11 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
           }}
         </Field>
 
-        <Field name="description" defaultValue={profileData.data}>
+        <Field name="description" defaultValue={profileData.data.description}>
           {({ errors, value, ...inputProps }) => {
             return (
               <div>
                 <input
-                  // onChange={(e) => {
-                  //   handleChange(e);
-                  //   onChange(e.target.value);
-                  // }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
@@ -128,29 +103,11 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
 
 function AddCardForm(props: AddCardForm): JSX.Element {
   const validators = addCardValidator;
+  const newCardData = useContext(NewCardContext);
 
-  const [newCard, setNewCard] = useState({
-    id: `${Math.floor(Math.random() * 1000)}`,
-    likes: [],
-    title: "",
-    url: "",
-    userId: "currentUser",
-  });
-  
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const inputName = e.target.name;
-    const inputValue = e.target.value;
-
-    setNewCard((prevValue) => {
-      return {
-        ...prevValue,
-        [inputName]: inputValue,
-      };
-    });
-  }
-
-  function handleSubmit(): void {
-    console.log(newCard);
+  function handleSubmit(newCard: TCardData): void {
+    newCardData.setData(newCard)
+    console.log(newCardData.data);
     props.onRequestClose();
   }
 
@@ -160,14 +117,10 @@ function AddCardForm(props: AddCardForm): JSX.Element {
 
       <Form validators={validators} onSubmit={handleSubmit}>
         <Field name="title">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
@@ -185,14 +138,10 @@ function AddCardForm(props: AddCardForm): JSX.Element {
         </Field>
 
         <Field name="url">
-          {({ onChange, errors, ...inputProps }) => {
+          {({ errors, ...inputProps }) => {
             return (
               <div>
                 <input
-                  onChange={(e) => {
-                    handleChange(e);
-                    onChange(e.target.value);
-                  }}
                   {...inputProps}
                   type="text"
                   className="popup__input"
@@ -231,20 +180,13 @@ function AddCardForm(props: AddCardForm): JSX.Element {
 
 export function Profile() {
   const profileData = useContext(ProfileDataContext);
-  // const [newProfileData, setNewProfileData] = useState({
-  //   name: profileData.data.name,
-  //   description: profileData.data.description,
-  // });
-
   const [editIsOpen, setEditIsOpen] = useState(false);
   const [addCardisOpen, setAddCardisOpen] = useState(false);
 
   return (
     <>
       <Modal isOpen={editIsOpen} onRequestClose={() => setEditIsOpen(false)}>
-        <ProfileEditForm onRequestClose={() => setEditIsOpen(false)}
-        //  setNewProfileData={setNewProfileData}
-         />
+        <ProfileEditForm onRequestClose={() => setEditIsOpen(false)} />
       </Modal>
 
       <Modal

@@ -1,18 +1,19 @@
-import React, { useState, useCallback, useContext, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import "./form.styles.css";
 import { TValidators } from "./../../javascript/utils/validators"
-
+import { TProfileData } from "../../types";
 
 type TFormProps = {
   children: JSX.Element | Array<JSX.Element>;
   validators: TValidators;
+  defaultValue?: TProfileData;
   onSubmit: (values: Record<string, string>) => void;
 }
 
 export const FormContext = React.createContext({});
 
-export const Form = ({ children, validators, onSubmit }: TFormProps) => {
-  const [formValues, setFormValues] = useState({});
+export const Form = ({ children, validators, onSubmit, defaultValue }: TFormProps) => {
+  const [formValues, setFormValues] = useState(defaultValue ? defaultValue : {});
   const [formErrors, setFormErrors] = useState<Record<string, Record<string, boolean>>>({});
   const [isInvalid, setIsInvalid] = useState(true);
 
