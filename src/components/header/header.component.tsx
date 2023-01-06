@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import logo from "./../../images/logo.png";
 import "./header.styles.css";
 import { Modal } from "./../modal/modal.component";
@@ -9,14 +9,13 @@ import {
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
-import { TUserData } from "./../../types";
 
 type TSignInForm = {
-  onRequestClose: () => void;
+  onRequestClose?: () => void;
 };
 
 type TSignUPForm = {
-  onRequestClose: () => void;
+  onRequestClose?: () => void;
 };
 
 export function SignInForm(props: TSignInForm) {
@@ -91,7 +90,7 @@ export function SignInForm(props: TSignInForm) {
   );
 }
 
-export function SignUPForm(props: TSignUPForm) {
+export function SignUpForm(props: TSignUPForm) {
   const validators = signUpValidator;
 
   function handleSubmit(registerData: Record<string, string>): void {
@@ -266,7 +265,7 @@ export function Header() {
         isOpen={registerIsOpen}
         onRequestClose={() => setRegisterIsOpen(false)}
       >
-        <SignUPForm onRequestClose={() => setSignInIsOpen(false)} />
+        <SignUpForm onRequestClose={() => setSignInIsOpen(false)} />
       </Modal>
       <header className="header">
         <img className="logo" src={logo} />

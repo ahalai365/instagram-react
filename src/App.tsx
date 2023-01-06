@@ -7,11 +7,11 @@ import { TCardData, TProfileData } from "./types";
 import { Page } from "./components/page/page.component";
 import { Header } from "./components/header/header.component";
 import { Content } from "./components/content/content.components";
-import { Elements } from "./components/elements/elements.components";
 import { Footer } from "./components/footer/footer.components";
 import { Profile } from "./components/profile/profile.components";
-import { Modal } from "./components/modal/modal.component"
-import { SignInForm } from "./components/header/header.component";
+import { Modal } from "./components/modal/modal.component";
+import { SignIn } from "./components/sign-in/sign-in.component";
+import { SignUp } from "./components/sign-up/sign-up.component"
 import { ProfileDataContext, CardArrContext, NewCardContext } from "./context";
 
 function App() {
@@ -78,9 +78,8 @@ function App() {
           <Page>
             <Header />
             <Content>
-              <Modal isOpen={true} notAutorized={true}>
-                <SignInForm/>
-              </Modal>
+              {/* <SignIn /> */}
+              <SignUp />
               {/* <Profile />
               <Elements /> */}
             </Content>

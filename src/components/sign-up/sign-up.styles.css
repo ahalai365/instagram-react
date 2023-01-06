@@ -1,0 +1,20 @@
+.sign-up {
+  padding-top: 30px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.sign-up__content {
+  background-color: white;
+  color: black;
+  box-sizing: border-box;
+  max-width: 402px;
+  padding: 34px 36px 37px;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+}
