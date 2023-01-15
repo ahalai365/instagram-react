@@ -4,12 +4,12 @@ import "./../modal/modal.styles.css";
 import "./../opacity/opacity.styles.css";
 import jepa from "./../../images/jepa.jpg";
 import { Modal } from "./../modal/modal.component";
-import { ProfileDataContext, NewCardContext } from "../../context";
-import { profileEditValidator, addCardValidator } from "./../../javascript/utils/validators";
+import { UserDataContext, NewCardContext } from "../../context";
+import { profileEditValidator, addCardValidator } from "../../javascript/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
-import { TCardData, TProfileData } from "./../../types";
+import { TCardData, TUserData } from "./../../types";
 
 type TProfileEditFormProps = {
   onRequestClose: () => void;
@@ -21,9 +21,9 @@ type AddCardForm = {
 
 function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
   const validators = profileEditValidator;
-  const profileData = useContext(ProfileDataContext);
+  const profileData = useContext(UserDataContext);
 
-  function handleSubmit(newProfileData: TProfileData): void {
+  function handleSubmit(newProfileData: TUserData): void {
     profileData.setData(newProfileData);
     console.log(newProfileData)
     props.onRequestClose();
@@ -33,6 +33,7 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
     <>
       <div className="popup__title">Редактировать профиль</div>
 
+      {/* @ts-ignore */}
       <Form validators={validators} onSubmit={handleSubmit} defaultValue={profileData.data}>
         <Field name="name" defaultValue={profileData.data.name}>
           {({ errors, value, ...inputProps }) => {
@@ -115,6 +116,7 @@ function AddCardForm(props: AddCardForm): JSX.Element {
     <>
       <div className="popup__title">Добавить место</div>
 
+      {/* @ts-ignore */}
       <Form validators={validators} onSubmit={handleSubmit}>
         <Field name="title">
           {({ errors, ...inputProps }) => {
@@ -179,7 +181,7 @@ function AddCardForm(props: AddCardForm): JSX.Element {
 }
 
 export function Profile() {
-  const profileData = useContext(ProfileDataContext);
+  const profileData = useContext(UserDataContext);
   const [editIsOpen, setEditIsOpen] = useState(false);
   const [addCardisOpen, setAddCardisOpen] = useState(false);
 

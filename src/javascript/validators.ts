@@ -1,4 +1,7 @@
-type TValidator = (value: string) => boolean;
+type TValidator = (
+  value: string,
+  formValues?: { password: string } | undefined
+) => boolean;
 
 export type TValidators = {
   [fieldName: string]: {
@@ -8,6 +11,7 @@ export type TValidators = {
     validateUrl?: TValidator;
     validateEmail?: TValidator;
     passwordRepit?: TValidator;
+    validateRegExp?: TValidator;
   };
 };
 
@@ -23,8 +27,15 @@ function maxLength(value: string): boolean {
   return value.length > 20;
 }
 
-function passwordRepit(value: string): boolean {
-  let password = document.getElementById("password").value;
+function passwordRepit(
+  value: string,
+  formValues?: { password: string } | undefined
+): boolean {
+  let password = "";
+
+  if (formValues) {
+    password = formValues.password;
+  }
 
   if (value === password) {
     return false;
@@ -33,33 +44,24 @@ function passwordRepit(value: string): boolean {
   return true;
 }
 
-function validateUrl(value: string): boolean {
-  if (value === "") {
-    return false;
-  }
+function regExpValidator(regExp: RegExp) {
+  return (value: string): boolean => {
+    if (value === "") {
+      return false;
+    }
 
-  let res = value.match(
-    /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
-  );
-  return res === null;
-}
-
-function validateEmail(value: string): boolean {
-  if (value === "") {
-    return false;
-  }
-
-  let res = value.match(
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  );
-  return res === null;
+    let res = value.match(regExp);
+    return res === null;
+  };
 }
 
 // Форма входа
 export const signInValidator: TValidators = {
   email: {
     required,
-    validateEmail,
+    validateEmail: regExpValidator(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    ),
   },
 
   password: {
@@ -68,11 +70,14 @@ export const signInValidator: TValidators = {
 
   passwordRepit: {
     required,
+    passwordRepit,
   },
 
   avatar: {
     required,
-    validateUrl,
+    validateUrl: regExpValidator(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    ),
   },
 };
 
@@ -91,7 +96,9 @@ export const signUpValidator: TValidators = {
 
   email: {
     required,
-    validateEmail,
+    validateEmail: regExpValidator(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    ),
   },
 
   password: {
@@ -105,9 +112,12 @@ export const signUpValidator: TValidators = {
 
   avatar: {
     required,
-    validateUrl,
+    validateUrl: regExpValidator(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    ),
   },
 };
+
 // Форма редактирования профиля
 export const profileEditValidator: TValidators = {
   name: {
@@ -132,6 +142,8 @@ export const addCardValidator: TValidators = {
 
   url: {
     required,
-    validateUrl,
+    validateUrl: regExpValidator(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    ),
   },
 };

@@ -6,7 +6,7 @@ type TFieldChildProps = {
   type: string;
   name: string;
   value: string;
-  errors: Record<string, string>;
+  errors: Record<string, boolean>;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   id?: string;
 }
@@ -22,11 +22,10 @@ export const Field = ({ children, name, defaultValue, id }: TFieldProps) => {
   const [value, setValue] = useState(defaultValue ? defaultValue : "");
   const { onChangeInput, formErrors } = useContext(FormContext);
 
-  function onChange(e) {
+  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChangeInput(name, e.target.value);
     setValue(e.target.value);
   }
-
   return (
     <>
       {children({

@@ -1,12 +1,12 @@
-import { TCardData } from './../../types';
-import { TUserData } from './../../types';
-import { TUserResponse } from './../../types';
-import { TLoginUserData } from './../../types';
-import { TLoginResponse } from './../../types';
-import { TLikeCardResponse } from './../../types';
-import { TDeleteCardResponse } from './../../types';
-import { TUserDataResponse } from './../../types';
-import { TCardDataResponse } from './../../types';
+import { TCardData } from '../types';
+import { TUserData } from '../types';
+import { TUserResponse } from '../types';
+import { TLoginUserData } from '../types';
+import { TLoginResponse } from '../types';
+import { TLikeCardResponse } from '../types';
+import { TDeleteCardResponse } from '../types';
+import { TUserDataResponse } from '../types';
+import { TCardDataResponse } from '../types';
 
 class Api {
   private _baseUrl: string;

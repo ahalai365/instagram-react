@@ -32,6 +32,11 @@
   
     display: flex;
   }
+
+  .account_active {
+    color: #a115bd;
+    text-decoration: underline;
+  }
   @media (max-width: 630px) {
     .account {
         font-weight: 400;
@@ -41,25 +46,14 @@
     }
   }
 
-  .account__auth {
-    display: none;
-  }
-
   .account__exit {
-    display: none;
     cursor: pointer;
   }
 
   .account__registration {
-    display: none;
     cursor: pointer;
   }
 
   .account__sign-in {
-    display: none;
     cursor: pointer;
-  }
-
-  .account_active {
-    display: block;
   }

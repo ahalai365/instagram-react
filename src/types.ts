@@ -9,11 +9,11 @@ export type TCardData = {
 export type TUserData = {
   name: string;
   description: string;
-  avatar: string;
-  email: string;
-  password: string;
-  id: string;
-}
+  avatar?: string;
+  email?: string;
+  password?: string;
+  id?: string;
+} | {}
 
 export type TUserResponse = {
   success: true;
@@ -58,7 +58,7 @@ export type TUserDataResponse = {
 
 export type TCardDataResponse = Array<TCardData>;
 
-export type TProfileData = {
-  name: string;
-  description: string;
-}
+// export type TProfileData = {
+//   name: string;
+//   description: string;
+// } | {}

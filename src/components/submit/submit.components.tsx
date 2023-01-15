@@ -2,7 +2,11 @@ import React, { useContext } from "react";
 import { FormContext } from "../form/form.components";
 import "./../submit/submit.styles.css";
 
-export const Submit = ({ children }) => {
+type TSubmitProps = {
+  children: (isInvalid: boolean) => JSX.Element
+}
+
+export const Submit = ({ children }: TSubmitProps) => {
   const { isInvalid } = useContext(FormContext);
   return children(isInvalid);
 }

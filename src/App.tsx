@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
-import { api } from "./javascript/utils/api";
+import { api } from "./javascript/api";
 
-import { TCardData, TProfileData } from "./types";
+import { TCardData, TUserData } from "./types";
 import { Page } from "./components/page/page.component";
 import { Header } from "./components/header/header.component";
 import { Content } from "./components/content/content.components";
 import { Footer } from "./components/footer/footer.components";
 import { Profile } from "./components/profile/profile.components";
-import { Modal } from "./components/modal/modal.component";
+import { Elements } from "./components/elements/elements.components";
 import { SignIn } from "./components/sign-in/sign-in.component";
-import { SignUp } from "./components/sign-up/sign-up.component"
-import { ProfileDataContext, CardArrContext, NewCardContext } from "./context";
+import { SignUp } from "./components/sign-up/sign-up.component";
+import { CardArrContext, NewCardContext, UserDataContext } from "./context";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { sessionManager } from "./javascript/session-manager";
 
 function App() {
   const [cardsArr, setCardsArr] = useState<Array<TCardData>>([]);
-  const [profileData, setProfileData] = useState<TProfileData>({
-    name: "Заглушка",
-    description: "Заглушка",
-  });
+  const [userData, setUserData] = useState<TUserData>({});
   const [newCardData, setNewCardData] = useState<TCardData>({
     id: `${Math.floor(Math.random() * 1000)}`,
     likes: [],
@@ -36,6 +35,13 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    sessionManager.start().then((responseBody) => {
+      setUserData(responseBody.user);
+    });
+  }, []);
+
+  const loggedIn = localStorage.getItem("token");
   // function onLikeCard(cardId: TCardData["id"]) {
   //   const newCards = cardsArr.map((card: TCardData) => {
   //     if (card.id !== cardId) {
@@ -51,11 +57,11 @@ function App() {
   // }
 
   return (
-    <ProfileDataContext.Provider
+    <UserDataContext.Provider
       value={{
-        data: profileData,
+        data: userData,
         setData: (data) => {
-          setProfileData(data);
+          setUserData(data);
         },
       }}
     >
@@ -78,16 +84,21 @@ function App() {
           <Page>
             <Header />
             <Content>
-              {/* <SignIn /> */}
-              <SignUp />
-              {/* <Profile />
-              <Elements /> */}
+              <Routes>
+                <Route path="/sign-in" element={<SignIn />} />
+                <Route path="/sign-up" element={<SignUp />} />
+                {/* <Route path="/">
+                  {!loggedIn ? <Navigate to="/sign-in" /> : <Profile />}
+                </Route> */}
+              </Routes>
+              {/* <Profile /> */}
+              {/* <Elements /> */}
             </Content>
             <Footer />
           </Page>
         </NewCardContext.Provider>
       </CardArrContext.Provider>
-    </ProfileDataContext.Provider>
+    </UserDataContext.Provider>
   );
 }
 

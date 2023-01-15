@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import "./form.styles.css";
-import { TValidators } from "./../../javascript/utils/validators"
+import { TValidators } from "../../javascript/validators";
 import { TProfileData } from "../../types";
 
 type TFormProps = {
@@ -8,39 +8,60 @@ type TFormProps = {
   validators: TValidators;
   defaultValue?: TProfileData;
   onSubmit: (values: Record<string, string>) => void;
-}
+};
 
-export const FormContext = React.createContext({});
+type TFormContext = {
+  onChangeInput: (name: string, value: string) => void;
+  formErrors: Record<string, Record<string, boolean>>;
+  isInvalid: boolean;
+};
 
-export const Form = ({ children, validators, onSubmit, defaultValue }: TFormProps) => {
-  const [formValues, setFormValues] = useState(defaultValue ? defaultValue : {});
-  const [formErrors, setFormErrors] = useState<Record<string, Record<string, boolean>>>({});
+// @ts-ignore
+export const FormContext = React.createContext<TFormContext>({});
+
+export const Form = ({
+  children,
+  validators,
+  onSubmit,
+  defaultValue,
+}: TFormProps) => {
+  const [formValues, setFormValues] = useState(
+    defaultValue ? defaultValue : {}
+  );
+  const [formErrors, setFormErrors] = useState<
+    Record<string, Record<string, boolean>>
+  >({});
   const [isInvalid, setIsInvalid] = useState(true);
 
   const onChangeInput = useCallback((name: string, value: string): void => {
-    setFormValues(prevValues =>({
+    setFormValues((prevValues) => ({
       ...prevValues,
       [name]: value,
     }));
   }, []);
 
-// Вызвать валидации на каждый ввод в форму
+  // Вызвать валидации на каждый ввод в форму
   useEffect(() => {
     const formKeys = Object.keys(formValues);
 
-    const allErrors = formKeys.map((key) => {
-      const valueByKey = formValues[key];
-      if (!validators[key]) {
-        return {};
-      }
+    const allErrors = formKeys
+      .map((key) => {
+        const valueByKey = formValues[key];
+        if (!validators[key]) {
+          return {};
+        }
 
-      const errors = Object.entries(validators[key]).map(([errorKey, validatorFn]) => {
-       return { [errorKey]: validatorFn(valueByKey) }; 
-      }).reduce((acc, item) => ({...acc, ...item}), {});
+        const errors = Object.entries(validators[key])
+          .map(([errorKey, validatorFn]) => {
+            // @ts-ignore
+            return { [errorKey]: validatorFn(valueByKey, formValues) };
+          })
+          .reduce((acc, item) => ({ ...acc, ...item }), {});
 
-      return { [key]: errors };
-    }).reduce((acc, item) => ({ ...acc, ...item }), {});
-   
+        return { [key]: errors };
+      })
+      .reduce((acc, item) => ({ ...acc, ...item }), {});
+
     setFormErrors(allErrors);
   }, [formValues]);
 
@@ -50,7 +71,7 @@ export const Form = ({ children, validators, onSubmit, defaultValue }: TFormProp
       for (const errorKey in keyErrors) {
         if (keyErrors[errorKey] === true) {
           return setIsInvalid(true);
-        }  
+        }
       }
     }
 
@@ -62,15 +83,17 @@ export const Form = ({ children, validators, onSubmit, defaultValue }: TFormProp
     onSubmit(formValues);
   }
 
-  const formContextValue = { 
+  const formContextValue = {
     onChangeInput,
     isInvalid,
     formErrors,
   };
 
-  return <form onSubmit={handleSubmit} >
-    <FormContext.Provider value={ formContextValue }>
-      {children}
-    </FormContext.Provider>
-  </form>;
-}
+  return (
+    <form onSubmit={handleSubmit}>
+      <FormContext.Provider value={formContextValue}>
+        {children}
+      </FormContext.Provider>
+    </form>
+  );
+};
