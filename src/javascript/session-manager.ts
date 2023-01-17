@@ -1,8 +1,9 @@
+import { TLoginUserData, TUserDataResponse } from "../types";
 import { api } from "./api";
 
 export class SessionManager {
-  start() {
-    const token = localStorage.getItem("token");
+  start(): Promise<TUserDataResponse | void> {
+    const token: string | null = localStorage.getItem("token");
     api.setupAuthToken(token);
     if (token) {
       return api.getUser();
@@ -10,27 +11,25 @@ export class SessionManager {
     return Promise.resolve();
   }
 
-  _setupUser(user) {
-    if (user) {
-      console.log("setup", user);
-    }
-  }
-
-  _setupToken(token) {
+  _setupToken(token: string | null): void {
     if (token) {
       api.setupAuthToken(`Bearer ${token}`);
       localStorage.setItem("token", `Bearer ${token}`);
     } else {
-      api.setupAuthToken();
+      api.setupAuthToken(token);
       localStorage.removeItem("token");
     }
   }
 
-  login(data) {
+  login(data: TLoginUserData): Promise<TUserDataResponse | null> {
     return api.login(data).then((responseBody) => {
-      const token = responseBody.token;
-      this._setupToken(token);
-      return api.getUser();
+      if (responseBody.success) {
+        const token = responseBody.token;
+        this._setupToken(token);
+        return api.getUser();
+      }
+
+      return null
     });
     // .then((responseBody) => {
     //   return this._setupUser(responseBody.user);

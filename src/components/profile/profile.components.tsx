@@ -35,7 +35,7 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
 
       {/* @ts-ignore */}
       <Form validators={validators} onSubmit={handleSubmit} defaultValue={profileData.data}>
-        <Field name="name" defaultValue={profileData.data.name}>
+        <Field name="name" defaultValue={profileData.data?.name}>
           {({ errors, value, ...inputProps }) => {
             return (
               <div>
@@ -60,7 +60,7 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
           }}
         </Field>
 
-        <Field name="description" defaultValue={profileData.data.description}>
+        <Field name="description" defaultValue={profileData.data?.description}>
           {({ errors, value, ...inputProps }) => {
             return (
               <div>
@@ -202,7 +202,7 @@ export function Profile() {
         <img className="profile__avatar" src={jepa} />
         <div className="profile__info">
           <div className="profile__title">
-            <h1 className="profile__name">{profileData.data.name}</h1>
+            <h1 className="profile__name">{profileData.data?.name}</h1>
             <button
               className="profile__edit opacity"
               onClick={() => {
@@ -210,7 +210,7 @@ export function Profile() {
               }}
             ></button>
           </div>
-          <h2 className="profile__subtitle">{profileData.data.description}</h2>
+          <h2 className="profile__subtitle">{profileData.data?.description}</h2>
         </div>
         <button
           className="profile__add opacity"

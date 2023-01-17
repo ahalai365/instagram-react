@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, createContext } from "react";
 import "./form.styles.css";
 import { TValidators } from "../../javascript/validators";
-import { TProfileData } from "../../types";
+import { TUserData } from "../../types";
 
 type TFormProps = {
   children: JSX.Element | Array<JSX.Element>;
   validators: TValidators;
-  defaultValue?: TProfileData;
+  defaultValue?: TUserData;
   onSubmit: (values: Record<string, string>) => void;
 };
 
@@ -14,10 +14,10 @@ type TFormContext = {
   onChangeInput: (name: string, value: string) => void;
   formErrors: Record<string, Record<string, boolean>>;
   isInvalid: boolean;
-};
+} | null;
 
-// @ts-ignore
-export const FormContext = React.createContext<TFormContext>({});
+
+export const FormContext = createContext<TFormContext>(null);
 
 export const Form = ({
   children,

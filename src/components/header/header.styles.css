@@ -34,8 +34,9 @@
   }
 
   .account_active {
-    color: #a115bd;
-    text-decoration: underline;
+    /* color: #a115bd;
+    text-decoration: underline; */
+    display: block;
   }
   @media (max-width: 630px) {
     .account {

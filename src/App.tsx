@@ -13,12 +13,12 @@ import { Elements } from "./components/elements/elements.components";
 import { SignIn } from "./components/sign-in/sign-in.component";
 import { SignUp } from "./components/sign-up/sign-up.component";
 import { CardArrContext, NewCardContext, UserDataContext } from "./context";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { sessionManager } from "./javascript/session-manager";
 
 function App() {
   const [cardsArr, setCardsArr] = useState<Array<TCardData>>([]);
-  const [userData, setUserData] = useState<TUserData>({});
+  const [userData, setUserData] = useState<TUserData | null>(null);
   const [newCardData, setNewCardData] = useState<TCardData>({
     id: `${Math.floor(Math.random() * 1000)}`,
     likes: [],
@@ -37,24 +37,12 @@ function App() {
 
   useEffect(() => {
     sessionManager.start().then((responseBody) => {
-      setUserData(responseBody.user);
+      if (responseBody !== undefined) {
+        setUserData(responseBody.user);
+      }
+      console.log(userData);
     });
   }, []);
-
-  const loggedIn = localStorage.getItem("token");
-  // function onLikeCard(cardId: TCardData["id"]) {
-  //   const newCards = cardsArr.map((card: TCardData) => {
-  //     if (card.id !== cardId) {
-  //       return card;
-  //     }
-  //     return {
-  //       ...card,
-  //       isLiked: !card.likes,
-  //     };
-  //   });
-
-  //   setCardsArr(newCards);
-  // }
 
   return (
     <UserDataContext.Provider
@@ -87,12 +75,16 @@ function App() {
               <Routes>
                 <Route path="/sign-in" element={<SignIn />} />
                 <Route path="/sign-up" element={<SignUp />} />
-                {/* <Route path="/">
-                  {!loggedIn ? <Navigate to="/sign-in" /> : <Profile />}
-                </Route> */}
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      {userData && <Profile />}
+                      <Elements />
+                    </>
+                  }
+                />
               </Routes>
-              {/* <Profile /> */}
-              {/* <Elements /> */}
             </Content>
             <Footer />
           </Page>
@@ -103,3 +95,17 @@ function App() {
 }
 
 export default App;
+
+// function onLikeCard(cardId: TCardData["id"]) {
+  //   const newCards = cardsArr.map((card: TCardData) => {
+  //     if (card.id !== cardId) {
+  //       return card;
+  //     }
+  //     return {
+  //       ...card,
+  //       isLiked: !card.likes,
+  //     };
+  //   });
+
+  //   setCardsArr(newCards);
+  // }

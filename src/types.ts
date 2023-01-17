@@ -13,7 +13,7 @@ export type TUserData = {
   email?: string;
   password?: string;
   id?: string;
-} | {}
+}
 
 export type TUserResponse = {
   success: true;
@@ -52,9 +52,7 @@ export type TDeleteCardResponse = {
 export type TUserDataResponse = {
   success: true;
   user: TUserData;
-} | {
-  success: false;
-}
+} 
 
 export type TCardDataResponse = Array<TCardData>;
 

@@ -19,7 +19,7 @@ class Api {
     };
   }
 
-  setupAuthToken(token: string): void {
+  setupAuthToken(token: string | null): void {
     if (token) {
       this._headers.Authorization = `${token}`;
     } else {

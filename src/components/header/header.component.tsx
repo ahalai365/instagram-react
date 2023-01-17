@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import logo from "./../../images/logo.png";
 import "./header.styles.css";
 import "./../opacity/opacity.styles.css";
@@ -7,35 +7,32 @@ import { signInValidator, signUpValidator } from "../../javascript/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { sessionManager } from "./../../javascript/session-manager";
 import { api } from "./../../javascript/api";
 import { TLoginUserData, TUserData } from "./../../types";
 import { UserDataContext } from "./../../context";
 
-type TSignInForm = {
-  onRequestClose?: () => void;
-};
-
-type TSignUPForm = {
-  onRequestClose?: () => void;
-};
-
-export function SignInForm(props: TSignInForm) {
+export function SignInForm() {
   const validators = signInValidator;
   const userData = useContext(UserDataContext);
+  const navigate = useNavigate();
 
   function handleSubmit(signInData: TLoginUserData): void {
     sessionManager.login(signInData).then((responseBody) => {
-      userData.setData(responseBody.user);
+      if (responseBody !== null) {
+        userData.setData(responseBody.user);
+        navigate("/");
+      }
     });
-    props.onRequestClose?.();
+    // props.onRequestClose?.();
   }
 
   return (
     <>
       <div className="popup__title">Вход</div>
 
+      {/* @ts-ignore */}
       <Form validators={validators} onSubmit={handleSubmit}>
         <Field name="email">
           {({ errors, ...inputProps }) => {
@@ -96,18 +93,18 @@ export function SignInForm(props: TSignInForm) {
   );
 }
 
-export function SignUpForm(props: TSignUPForm) {
+export function SignUpForm() {
   const validators = signUpValidator;
 
   function handleSubmit(registerData: TUserData): void {
     api.register(registerData);
-    props.onRequestClose?.();
+    // props.onRequestClose?.();
   }
 
   return (
     <>
       <div className="popup__title">Регистрация</div>
-
+      {/* @ts-ignore */}
       <Form validators={validators} onSubmit={handleSubmit}>
         <Field name="email">
           {({ errors, ...inputProps }) => {
@@ -256,34 +253,26 @@ export function SignUpForm(props: TSignUPForm) {
 }
 
 export function Header() {
-  const [signInIsOpen, setSignInIsOpen] = useState(false);
-  const [registerIsOpen, setRegisterIsOpen] = useState(false);
   const userData = useContext(UserDataContext);
 
   function handleClick() {
     sessionManager.logout();
-    userData.setData({});
+    userData.setData(null);
   }
 
   return (
     <>
-      <Modal
-        isOpen={signInIsOpen}
-        onRequestClose={() => setSignInIsOpen(false)}
-      >
-        <SignInForm onRequestClose={() => setSignInIsOpen(false)} />
+      <Modal>
+        <SignInForm />
       </Modal>
-      <Modal
-        isOpen={registerIsOpen}
-        onRequestClose={() => setRegisterIsOpen(false)}
-      >
-        <SignUpForm onRequestClose={() => setSignInIsOpen(false)} />
+      <Modal>
+        <SignUpForm />
       </Modal>
       <header className="header">
         <img className="logo" src={logo} />
         <div className="account">
-          {userData.data.email ? (
-            <span>{userData.data.email}</span>
+          {userData.data?.email ? (
+            <span>{userData.data?.email}</span>
           ) : (
             <NavLink
               to="sign-in"
@@ -292,17 +281,13 @@ export function Header() {
                   isActive ? "account_active" : ""
                 }`
               }
-              // onClick={() => {
-              //   setSignInIsOpen(true);
-              // }}
             >
               Вход
             </NavLink>
           )}
-          <span>&nbsp;/&nbsp;</span>
-          {userData.data.email ? (
+          {userData.data?.email ? (
             <span className="account__exit opacity" onClick={handleClick}>
-              Выход
+              &nbsp;/&nbsp;Выход
             </span>
           ) : (
             <NavLink
@@ -312,9 +297,6 @@ export function Header() {
                   isActive ? "account_active" : ""
                 }`
               }
-              // onClick={() => {
-              //   setRegisterIsOpen(true);
-              // }}
             >
               Зарегистрироваться
             </NavLink>

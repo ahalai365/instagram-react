@@ -15,8 +15,8 @@ export const CardArrContext = createContext<{
 
 // @ts-ignore
 export const UserDataContext = createContext<{
-  data: TUserData;
-  setData: (data: TUserData) => void;
+  data: TUserData | null;
+  setData: (data: TUserData | null) => void;
 }>();
 
 // @ts-ignore

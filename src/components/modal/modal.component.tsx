@@ -5,8 +5,8 @@ import { createPortal } from "react-dom";
 const modalRootElement = document.querySelector("#modal");
 
 type TModalProps = {
-  isOpen: boolean;
-  onRequestClose: () => void;
+  isOpen?: boolean;
+  onRequestClose?: () => void;
   children?: React.ReactElement;
   contentClassName?: string;
   notAutorized?: boolean;
