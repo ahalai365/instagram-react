@@ -1,15 +1,19 @@
-import React, { useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import "./profile.styles.css";
 import "./../modal/modal.styles.css";
 import "./../opacity/opacity.styles.css";
 import jepa from "./../../images/jepa.jpg";
 import { Modal } from "./../modal/modal.component";
-import { UserDataContext, NewCardContext } from "../../context";
-import { profileEditValidator, addCardValidator } from "../../javascript/validators";
+import { UserDataContext, NewCardContext, CardArrContext } from "./../../context";
+import {
+  profileEditValidator,
+  addCardValidator,
+} from "../../javascript/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
 import { TCardData, TUserData } from "./../../types";
+import { api } from "../../javascript/api";
 
 type TProfileEditFormProps = {
   onRequestClose: () => void;
@@ -25,7 +29,6 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
 
   function handleSubmit(newProfileData: TUserData): void {
     profileData.setData(newProfileData);
-    console.log(newProfileData)
     props.onRequestClose();
   }
 
@@ -34,7 +37,11 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
       <div className="popup__title">Редактировать профиль</div>
 
       {/* @ts-ignore */}
-      <Form validators={validators} onSubmit={handleSubmit} defaultValue={profileData.data}>
+      <Form
+        validators={validators}
+        onSubmit={handleSubmit}
+        defaultValue={profileData.data}
+      >
         <Field name="name" defaultValue={profileData.data?.name}>
           {({ errors, value, ...inputProps }) => {
             return (
@@ -107,10 +114,14 @@ function AddCardForm(props: AddCardForm): JSX.Element {
   const newCardData = useContext(NewCardContext);
 
   function handleSubmit(newCard: TCardData): void {
-    newCardData.setData(newCard)
-    console.log(newCardData.data);
+    newCardData.setData(newCard);
+    if (newCardData) {
+      api.createCard(newCard);
+    }
     props.onRequestClose();
   }
+
+  
 
   return (
     <>
@@ -130,6 +141,9 @@ function AddCardForm(props: AddCardForm): JSX.Element {
                 />
                 {errors?.required && (
                   <div className="popup__error">Укажите название</div>
+                )}
+                {errors?.minLength && (
+                  <div className="popup__error">Название слишком короткое</div>
                 )}
                 {errors?.maxLength && (
                   <div className="popup__error">Название слишком длинное</div>
@@ -152,7 +166,7 @@ function AddCardForm(props: AddCardForm): JSX.Element {
                 {errors?.required && (
                   <div className="popup__error">Укажите адрес</div>
                 )}
-                {errors?.validateRegExp && (
+                {errors?.validateUrl && (
                   <div className="popup__error">Это не URL</div>
                 )}
               </div>
@@ -167,9 +181,10 @@ function AddCardForm(props: AddCardForm): JSX.Element {
               type="submit"
               className={
                 isFormInvalid
-                  ? "popup__submit_disable popup__submit opacity"
+                  ? "popup__submit popup__submit_disable opacity"
                   : "popup__submit opacity"
               }
+              
             >
               Сохранить
             </button>
@@ -195,7 +210,7 @@ export function Profile() {
         isOpen={addCardisOpen}
         onRequestClose={() => setAddCardisOpen(false)}
       >
-        <AddCardForm onRequestClose={() => setEditIsOpen(false)} />
+        <AddCardForm onRequestClose={() => setAddCardisOpen(false)} />
       </Modal>
 
       <section className="profile profile_active">

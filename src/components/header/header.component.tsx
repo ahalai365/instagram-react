@@ -7,7 +7,7 @@ import { signInValidator, signUpValidator } from "../../javascript/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, Route, useNavigate } from "react-router-dom";
 import { sessionManager } from "./../../javascript/session-manager";
 import { api } from "./../../javascript/api";
 import { TLoginUserData, TUserData } from "./../../types";
@@ -25,13 +25,11 @@ export function SignInForm() {
         navigate("/");
       }
     });
-    // props.onRequestClose?.();
   }
 
   return (
     <>
       <div className="popup__title">Вход</div>
-
       {/* @ts-ignore */}
       <Form validators={validators} onSubmit={handleSubmit}>
         <Field name="email">
@@ -98,7 +96,6 @@ export function SignUpForm() {
 
   function handleSubmit(registerData: TUserData): void {
     api.register(registerData);
-    // props.onRequestClose?.();
   }
 
   return (
@@ -224,7 +221,7 @@ export function SignUpForm() {
                 {errors?.required && (
                   <div className="popup__error">Укажите адрес</div>
                 )}
-                {errors?.validateRegExp && (
+                {errors?.validateUrl && (
                   <div className="popup__error">Это не URL</div>
                 )}
               </div>
@@ -269,7 +266,9 @@ export function Header() {
         <SignUpForm />
       </Modal>
       <header className="header">
-        <img className="logo" src={logo} />
+        <Link to="/">
+          <img className="logo" src={logo} />
+        </Link>
         <div className="account">
           {userData.data?.email ? (
             <span>{userData.data?.email}</span>

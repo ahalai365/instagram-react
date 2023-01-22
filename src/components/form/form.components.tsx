@@ -10,7 +10,7 @@ type TFormProps = {
   onSubmit: (values: Record<string, string>) => void;
 };
 
-type TFormContext = {
+export type TFormContext = {
   onChangeInput: (name: string, value: string) => void;
   formErrors: Record<string, Record<string, boolean>>;
   isInvalid: boolean;
@@ -25,9 +25,10 @@ export const Form = ({
   onSubmit,
   defaultValue,
 }: TFormProps) => {
-  const [formValues, setFormValues] = useState(
+  const [formValues, setFormValues] = useState<Record<string, string>>(
     defaultValue ? defaultValue : {}
   );
+  
   const [formErrors, setFormErrors] = useState<
     Record<string, Record<string, boolean>>
   >({});
@@ -53,7 +54,7 @@ export const Form = ({
 
         const errors = Object.entries(validators[key])
           .map(([errorKey, validatorFn]) => {
-            // @ts-ignore
+            
             return { [errorKey]: validatorFn(valueByKey, formValues) };
           })
           .reduce((acc, item) => ({ ...acc, ...item }), {});

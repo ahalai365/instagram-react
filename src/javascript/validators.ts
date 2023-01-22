@@ -1,6 +1,6 @@
 type TValidator = (
   value: string,
-  formValues?: { password: string } | undefined
+  formValues?: { password?: string } | undefined
 ) => boolean;
 
 export type TValidators = {
@@ -29,11 +29,11 @@ function maxLength(value: string): boolean {
 
 function passwordRepit(
   value: string,
-  formValues?: { password: string } | undefined
+  formValues?: { password?: string } | undefined
 ): boolean {
   let password = "";
 
-  if (formValues) {
+  if (formValues?.password) {
     password = formValues.password;
   }
 
@@ -134,7 +134,7 @@ export const profileEditValidator: TValidators = {
 
 // Форма добавления фотографии
 export const addCardValidator: TValidators = {
-  name: {
+  title: {
     required,
     minLength,
     maxLength,

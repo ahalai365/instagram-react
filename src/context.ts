@@ -2,14 +2,8 @@ import { createContext } from "react";
 import { TCardData, TUserData } from "./types";
 
 // @ts-ignore
-// export const ProfileDataContext = createContext<{
-//   data: TProfileData;
-//   setData: (data: TProfileData) => void;
-// }>();
-
-// @ts-ignore
 export const CardArrContext = createContext<{
-  data: Array<TCardData>;
+  data: Array<TCardData> | null;
   setCardsArr: (data: Array<TCardData>) => void;
 }>();
 
@@ -20,13 +14,7 @@ export const UserDataContext = createContext<{
 }>();
 
 // @ts-ignore
-// export const LoginDataContext = createContext<{
-//   data: TLoginUserData;
-//   setData: (data: TLoginUserData) => void;
-// }>();
-
-// @ts-ignore
 export const NewCardContext = createContext<{
-  data: TCardData;
+  data: TCardData | null;
   setData: (data: TCardData) => void;
 }>();

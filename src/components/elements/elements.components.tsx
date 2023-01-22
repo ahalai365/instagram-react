@@ -8,7 +8,7 @@ export function Elements() {
     const cardArr = useContext(CardArrContext);
     return (
         <section className="elements">
-            {cardArr.data.map((card: TCardData) => <Element key={card.id} card={card} />)}
+            { cardArr.data?.map((card: TCardData) => <Element key={card.id} card={card} />)}
         </section>
     )
 }

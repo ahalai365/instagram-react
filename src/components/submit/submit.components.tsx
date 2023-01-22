@@ -7,7 +7,6 @@ type TSubmitProps = {
 }
 
 export const Submit = ({ children }: TSubmitProps) => {
-  //@ts-ignore
   const { isInvalid } = useContext(FormContext);
   return children(isInvalid);
 }

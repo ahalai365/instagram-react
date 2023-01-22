@@ -17,15 +17,9 @@ import { Routes, Route } from "react-router-dom";
 import { sessionManager } from "./javascript/session-manager";
 
 function App() {
-  const [cardsArr, setCardsArr] = useState<Array<TCardData>>([]);
+  const [cardsArr, setCardsArr] = useState<Array<TCardData> | null>(null);
   const [userData, setUserData] = useState<TUserData | null>(null);
-  const [newCardData, setNewCardData] = useState<TCardData>({
-    id: `${Math.floor(Math.random() * 1000)}`,
-    likes: [],
-    title: "",
-    url: "",
-    userId: "currentUser",
-  });
+  const [newCardData, setNewCardData] = useState<TCardData | null>(null);
 
   useEffect(() => {
     api.getAllcards().then((response) => {
@@ -36,11 +30,18 @@ function App() {
   }, []);
 
   useEffect(() => {
+    api.getAllcards().then((response) => {
+      if (response) {
+        setCardsArr(response);
+      }
+    });
+  }, [newCardData]);
+
+  useEffect(() => {
     sessionManager.start().then((responseBody) => {
       if (responseBody !== undefined) {
         setUserData(responseBody.user);
       }
-      console.log(userData);
     });
   }, []);
 
@@ -97,15 +98,15 @@ function App() {
 export default App;
 
 // function onLikeCard(cardId: TCardData["id"]) {
-  //   const newCards = cardsArr.map((card: TCardData) => {
-  //     if (card.id !== cardId) {
-  //       return card;
-  //     }
-  //     return {
-  //       ...card,
-  //       isLiked: !card.likes,
-  //     };
-  //   });
+//   const newCards = cardsArr.map((card: TCardData) => {
+//     if (card.id !== cardId) {
+//       return card;
+//     }
+//     return {
+//       ...card,
+//       isLiked: !card.likes,
+//     };
+//   });
 
-  //   setCardsArr(newCards);
-  // }
+//   setCardsArr(newCards);
+// }

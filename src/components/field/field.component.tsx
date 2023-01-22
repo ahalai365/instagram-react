@@ -20,7 +20,7 @@ type TFieldProps = {
 
 export const Field = ({ children, name, defaultValue, id }: TFieldProps) => {
   const [value, setValue] = useState(defaultValue ? defaultValue : "");
-  //@ts-ignore
+  
   const { onChangeInput, formErrors } = useContext(FormContext);
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
