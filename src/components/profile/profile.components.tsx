@@ -35,12 +35,11 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
   return (
     <>
       <div className="popup__title">Редактировать профиль</div>
-
-      {/* @ts-ignore */}
       <Form
         validators={validators}
+        // @ts-ignore
         onSubmit={handleSubmit}
-        defaultValue={profileData.data}
+        defaultValue={profileData ? profileData.data : null}
       >
         <Field name="name" defaultValue={profileData.data?.name}>
           {({ errors, value, ...inputProps }) => {

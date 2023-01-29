@@ -16,8 +16,6 @@ type TPreviewCardProps = {
 };
 
 function PreviewCard(props: TPreviewCardProps) {
-  
-
   return (
     <>
       <img className="popup__img" src={props.url} />
@@ -26,15 +24,15 @@ function PreviewCard(props: TPreviewCardProps) {
 }
 
 export function Element(props: TElementProps) {
-  const [isLiked, setIsLiked] = useState(false);
   const [previewIsOpen, setPreviewIsOpen] = useState(false);
-  
+  const [likes, setLikes] = useState(props.card.likes);
+
   const cardArr = useContext(CardArrContext);
 
   function deleteCard() {
     const cardId = props.card.id;
 
-    api.deleteCard(cardId)
+    api.deleteCard(cardId);
     api.getAllcards().then((response) => {
       if (response) {
         cardArr.setCardsArr(response);
@@ -42,24 +40,13 @@ export function Element(props: TElementProps) {
     });
   }
 
-  //   useEffect(() => {
-  //     if (!isLiked) {
-  //       return;
-  //     }
-  //   }, [isLiked]);
-
-  //   function handleLike() {
-  //     props.onLike(props.card.id);
-  //   }
-
-//   function onPreview(card: TCardData): void {
-//     setPreviewCard(card);
-//     previewSetIsOpen(true);
-//   }
-
-//   function handlePreview(): void {
-//     props.onPreview(props.card);
-//   }
+  function handleLike() {
+    api.likeCard(props.card.id).then((responseBody) => {
+      if (responseBody.success) {
+        setLikes(responseBody.card.likes);
+      }
+    });
+  }
 
   return (
     <>
@@ -68,7 +55,7 @@ export function Element(props: TElementProps) {
         isOpen={previewIsOpen}
         onRequestClose={() => setPreviewIsOpen(false)}
       >
-        <PreviewCard url={props.card.url}/>
+        <PreviewCard url={props.card.url} />
       </Modal>
 
       <div className="element">
@@ -77,15 +64,19 @@ export function Element(props: TElementProps) {
           src={props.card.url}
           onClick={() => setPreviewIsOpen(true)}
         />
-        <img className="element__delete" src={trashBasket} onClick={deleteCard}/>
+        <img
+          className="element__delete"
+          src={trashBasket}
+          onClick={deleteCard}
+        />
         <div className="element__footer">
           <h3 className="element__title">{props.card.title}</h3>
-          <span className="element__count">0</span>
+          <span className="element__count">{likes.length}</span>
           <img
+            onClick={handleLike}
             className={`element__like opacity ${
-              props.card.likes ? "element__like_active" : ""
+              likes.length > 0 ? "element__like_active" : ""
             }`}
-            // onClick={handleLike}
             src={dislike}
           />
         </div>

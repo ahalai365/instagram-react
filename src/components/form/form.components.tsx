@@ -6,7 +6,7 @@ import { TUserData } from "../../types";
 type TFormProps = {
   children: JSX.Element | Array<JSX.Element>;
   validators: TValidators;
-  defaultValue?: TUserData;
+  defaultValue: TUserData | null;
   onSubmit: (values: Record<string, string>) => void;
 };
 

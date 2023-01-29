@@ -13,46 +13,54 @@ export type TUserData = {
   email?: string;
   password?: string;
   id?: string;
-}
+};
 
-export type TUserResponse = {
-  success: true;
-  userId: string;
-} | {
-  success: false;
-  error: string;
-}
+export type TUserResponse =
+  | {
+      success: true;
+      userId: string;
+    }
+  | {
+      success: false;
+      error: string;
+    };
 
 export type TLoginUserData = {
   email: string;
   password: string;
-}
+};
 
-export type TLoginResponse = {
-  success: true;
-  token: string;
-} | {
-  success: false;
-}
+export type TLoginResponse =
+  | {
+      success: true;
+      token: string;
+    }
+  | {
+      success: false;
+    };
 
-export type TLikeCardResponse = {
-  success: true;
-  likes: Array<string>
-} | {
-  success: false;
-}
+export type TLikeCardResponse =
+  | {
+      success: true;
+      card: TCardData;
+    }
+  | {
+      success: false;
+    };
 
-export type TDeleteCardResponse = {
-  success: true;
-} | {
-  success: false;
-  error: string;
-}
+export type TDeleteCardResponse =
+  | {
+      success: true;
+    }
+  | {
+      success: false;
+      error: string;
+    };
 
 export type TUserDataResponse = {
   success: true;
   user: TUserData;
-} 
+};
 
 export type TCardDataResponse = Array<TCardData>;
 

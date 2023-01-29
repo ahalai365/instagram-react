@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { FormContext } from "../form/form.components";
+import { FormContext, TFormContext } from "../form/form.components";
 import "./../field/field.styles.css";
 
 type TFieldChildProps = {
@@ -20,8 +20,8 @@ type TFieldProps = {
 
 export const Field = ({ children, name, defaultValue, id }: TFieldProps) => {
   const [value, setValue] = useState(defaultValue ? defaultValue : "");
-  
-  const { onChangeInput, formErrors } = useContext(FormContext);
+  // @ts-ignore
+  const { onChangeInput, formErrors } = useContext<TFormContext>(FormContext);
 
   function onChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChangeInput(name, e.target.value);

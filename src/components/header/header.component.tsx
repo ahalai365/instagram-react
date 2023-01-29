@@ -7,7 +7,7 @@ import { signInValidator, signUpValidator } from "../../javascript/validators";
 import { Form } from "./../form/form.components";
 import { Submit } from "./../submit/submit.components";
 import { Field } from "./../field/field.component";
-import { Link, NavLink, Route, useNavigate } from "react-router-dom";
+import { Link, NavLink, Route, useNavigate, Routes } from "react-router-dom";
 import { sessionManager } from "./../../javascript/session-manager";
 import { api } from "./../../javascript/api";
 import { TLoginUserData, TUserData } from "./../../types";
@@ -271,34 +271,59 @@ export function Header() {
         </Link>
         <div className="account">
           {userData.data?.email ? (
-            <span>{userData.data?.email}</span>
+            <>
+              <span>{userData.data?.email}</span>
+              <span className="account__exit opacity" onClick={handleClick}>
+                &nbsp;/&nbsp;Выход
+              </span>
+            </>
           ) : (
-            <NavLink
-              to="sign-in"
-              className={({ isActive }) =>
-                `account__registration opacity ${
-                  isActive ? "account_active" : ""
-                }`
-              }
-            >
-              Вход
-            </NavLink>
-          )}
-          {userData.data?.email ? (
-            <span className="account__exit opacity" onClick={handleClick}>
-              &nbsp;/&nbsp;Выход
-            </span>
-          ) : (
-            <NavLink
-              to="sign-up"
-              className={({ isActive }) =>
-                `account__registration opacity ${
-                  isActive ? "account_active" : ""
-                }`
-              }
-            >
-              Зарегистрироваться
-            </NavLink>
+            <>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <NavLink
+                        to="/sign-in"
+                        className="account__registration opacity"
+                      >
+                        Вход
+                      </NavLink>
+                      <NavLink
+                        to="/sign-up"
+                        className="account__registration opacity"
+                      >
+                        &nbsp;/&nbsp;Зарегистрироваться
+                      </NavLink>
+                    </>
+                  }
+                />
+                <Route
+                  path="/sign-up"
+                  element={
+                    <NavLink
+                      to="/sign-in"
+                      className="account__registration opacity"
+                    >
+                      Вход
+                    </NavLink>
+                  }
+                />
+
+                <Route
+                  path="/sign-in"
+                  element={
+                    <NavLink
+                      to="/sign-up"
+                      className="account__registration opacity"
+                    >
+                      Зарегистрироваться
+                    </NavLink>
+                  }
+                />
+              </Routes>
+            </>
           )}
         </div>
       </header>
