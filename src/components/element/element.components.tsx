@@ -5,7 +5,7 @@ import "./element.styles.css";
 import { TCardData } from "./../../types";
 import { Modal } from "./../modal/modal.component";
 import { api } from "../../javascript/api";
-import { CardArrContext } from "./../../context";
+import { CardArrContext, UserDataContext } from "./../../context";
 
 type TElementProps = {
   card: TCardData;
@@ -28,6 +28,7 @@ export function Element(props: TElementProps) {
   const [likes, setLikes] = useState(props.card.likes);
 
   const cardArr = useContext(CardArrContext);
+  const userData = useContext(UserDataContext);
 
   function deleteCard() {
     const cardId = props.card.id;
@@ -46,6 +47,14 @@ export function Element(props: TElementProps) {
         setLikes(responseBody.card.likes);
       }
     });
+  }
+
+  function isLiked() {
+    if (userData.data) {
+      return likes.includes(userData.data.id);
+    }
+    
+    return false
   }
 
   return (
@@ -75,7 +84,7 @@ export function Element(props: TElementProps) {
           <img
             onClick={handleLike}
             className={`element__like opacity ${
-              likes.length > 0 ? "element__like_active" : ""
+              isLiked() ? "element__like_active" : ""
             }`}
             src={dislike}
           />

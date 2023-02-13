@@ -29,7 +29,11 @@ function ProfileEditForm(props: TProfileEditFormProps): JSX.Element {
 
   function handleSubmit(newProfileData: TUserData): void {
     profileData.setData(newProfileData);
+    if (newProfileData) {
+      api.updateUser(newProfileData);
+    }
     props.onRequestClose();
+    
   }
 
   return (

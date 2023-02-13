@@ -19,12 +19,17 @@ export function SignInForm() {
   const navigate = useNavigate();
 
   function handleSubmit(signInData: TLoginUserData): void {
-    sessionManager.login(signInData).then((responseBody) => {
-      if (responseBody !== null) {
-        userData.setData(responseBody.user);
-        navigate("/");
-      }
-    });
+    sessionManager
+      .login(signInData)
+      .then((responseBody) => {
+        if (responseBody !== null) {
+          userData.setData(responseBody.user);
+          navigate("/");
+        }
+      })
+      .catch(() => {
+        console.log("error");
+      });
   }
 
   return (
